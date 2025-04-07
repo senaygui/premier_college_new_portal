@@ -26,8 +26,7 @@ class StudentCopy < Prawn::Document
       move_down 10
       student_copy = stud.course_registrations.order(:semester).group_by { |c| [c.semester, c.year] }
       student_copy.each do |key, value|
-        text "<u> Academic Year:#{key[1]} Semester #{key[0]}</u>", size: 14, font_style: :bold,
-                                                                       inline_format: true
+        text "<u> Academic Year:#{key[1]}/#{key[1] + 1} Semester #{key[0]}</u>", size: 14, font_style: :bold, inline_format: true
         move_down 10
         table each_stud_in_table(value, key[0]), cell_style: { size: 9, font_style: :bold, align: :center } do
           row(0).font_style = :bold
