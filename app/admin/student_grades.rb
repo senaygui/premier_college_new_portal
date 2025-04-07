@@ -59,7 +59,7 @@ ActiveAdmin.register StudentGrade do
       current_admin_user.role == 'dean' || current_admin_user.role == 'admin'
     }, confirm: 'Are you sure?' do |ids|
       StudentGrade.find(ids).each do |student_grade|
-        student_grade.update(dean_approval_statu: 'approved', dean_head_name: "#{current_admin_user.name.full}")
+        student_grade.update(dean_approval_status 'approved', dean_head_name: "#{current_admin_user.name.full}")
       end
       redirect_to collection_path, notice: 'Grade Is Approved Successfully'
     end
