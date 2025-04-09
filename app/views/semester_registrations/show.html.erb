@@ -50,7 +50,7 @@
               <div class="col-12 col-md-6">
                 <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item mx-3">
-                    <b>Academic Year</b> <a class="text-muted float-right"><%= AcademicCalendar.last.calender_year%></a>
+                    <b>Academic Year</b> <a class="text-muted float-right"><%= @semester_registration.academic_calendar.calender_year%></a>
                   </li>
                   <li class="list-group-item mx-3">
                     <b>Study Level</b> <a class="text-muted float-right"><%= current_student.study_level%></a>
