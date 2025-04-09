@@ -250,7 +250,7 @@ class Student < ApplicationRecord
       registration.student_full_name = "#{self.first_name.upcase} #{self.middle_name.upcase} #{self.last_name.upcase}"
       registration.student_id_number = self.student_id
       registration.created_by = "#{self.created_by}"
-      registration.academic_calendar_id = self.academic_calendar.id
+      registration.academic_calendar_id = AcademicCalendar.where(study_level: self.student.study_level, admission_type: self.student.admission_type)order(:created_at).last.id
       registration.year = self.year
       registration.semester = self.semester
       registration.program_name = self.program.program_name
