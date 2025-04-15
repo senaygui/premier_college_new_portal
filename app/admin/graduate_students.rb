@@ -127,6 +127,9 @@ ActiveAdmin.register Student, as: 'GraduateStudent' do
   # action_item :edit, only: :show, priority: 0 do
   #   link_to 'Approve Student', generate_student_copy(student.id)
   # end
+  action_item :edit, only: :show, priority: 0 do
+    link_to 'Student Copy', student_copy_path(graduate_student, format: :pdf)
+  end
   show title: proc { |graduate_student|
     truncate("#{graduate_student.first_name.upcase} #{graduate_student.middle_name.upcase} #{graduate_student.last_name.upcase}",
              length: 50)
