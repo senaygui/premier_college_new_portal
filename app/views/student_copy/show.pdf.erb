@@ -100,6 +100,38 @@
       margin-top: 10px;
       font-size: 11px;
     }
+.semester-wrapper {
+  width: 100%;
+}
+
+.semester-block {
+  width: 48%;
+  float: left;
+  margin: 1%;
+  border: 1px solid black;
+  padding: 8px;
+  box-sizing: border-box;
+  page-break-inside: avoid;
+}
+
+.course-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.course-table th,
+.course-table td {
+  border: 1px solid black;
+  padding: 4px;
+  font-size: 12px;
+  text-align: left;
+}
+
+.subheading {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+    
   </style>
 <div class="logo">
   
@@ -141,44 +173,49 @@
   </tr>
 </table>
 
-<% @semesters.each do |sem| %>
-  <div class="subheading">
-    Academic Year:<%= sem.academic_calendar.calender_year_in_gc %> <%= sem.semester_registration.semester %>
-  </div>
+<div class="semester-wrapper">
+  <% @semesters.each do |sem| %>
+    <div class="semester-block">
+      <div class="subheading">
+        Academic Year: <%= sem.academic_calendar.calender_year_in_gc %> Semester <%= sem.semester_registration.semester %> 
+      </div>
 
-  <table class="course-table">
-    <thead>
-      <tr>
-        <th>Course Code</th>
-        <th>Course Title</th>
-        <th>Cr. hr</th>
-        <th>Grade</th>
-        <th>Grade pts</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% sem.semester_registration.course_registrations.each do |c| %>
-        <tr>
-          <td><%= c.course.course_code %></td>
-          <td><%= c.course.course_title %></td>
-          <td><%= c.course.credit_hour %></td>
-          <td><%= c.student_grade.letter_grade %></td>
-          <td class="grade-points"><%= c.student_grade.grade_point %></td>
-        </tr>
-      <% end %>
-      <tr>
-        <td colspan="2">SGPA <%= sem.sgpa %></td>
-        <td colspan="2"><%= sem.total_credit_hour %></td>
-        <td ><%= sem.total_grade_point %></td>
-      </tr>
-      <tr>
-        <td colspan="2">CGPA <%= sem.cgpa %></td>
-        <td colspan="2"><%= sem.cumulative_total_credit_hour %></td>
-        <td><%= sem.cumulative_total_grade_point %></td>
-      </tr>
-    </tbody>
-  </table>
-<% end %>
+      <table class="course-table">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Title</th>
+            <th>Cr. hr</th>
+            <th>Grade</th>
+            <th>Grade pts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% sem.semester_registration.course_registrations.each do |c| %>
+            <tr>
+              <td><%= c.course.course_code %></td>
+              <td><%= c.course.course_title %></td>
+              <td><%= c.course.credit_hour %></td>
+              <td><%= c.student_grade.letter_grade %></td>
+              <td><%= c.student_grade.grade_point %></td>
+            </tr>
+          <% end %>
+          <tr>
+            <td colspan="2">SGPA <%= sem.sgpa %></td>
+            <td colspan="2"><%= sem.total_credit_hour %></td>
+            <td><%= sem.total_grade_point %></td>
+          </tr>
+          <tr>
+            <td colspan="2">CGPA <%= sem.cgpa %></td>
+            <td colspan="2"><%= sem.cumulative_total_credit_hour %></td>
+            <td><%= sem.cumulative_total_grade_point %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>
+<div style="clear: both;"></div>
 
 <div class="footer-note">
   Grading system:A=Excellent,B=Good,C=Satisfactory,D=Unsatisfactory/Failing,F=Fail,I=Incomplete,DO=Dropout,* Project/Senior Paper, EX=Exempted, NG= No Grade, P=Pass, "=" Course Repeated<br>
