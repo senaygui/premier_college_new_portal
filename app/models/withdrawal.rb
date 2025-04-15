@@ -34,7 +34,12 @@ class Withdrawal < ApplicationRecord
   def check_approvals
 	if all_approvals_approved?
 	  puts "All approvals are approved. Updating student account status."
-	  student.update(account_status: 'inactive')
+		if reason_for_withdrawal == 'Graduating Student'
+			student.update(account_status: 'inactive')
+			student.update(graduation_status: 'approved')
+		else
+			student.update(account_status: 'inactive')
+		end
 	else
 	  puts "Not all approvals are approved."
 	end

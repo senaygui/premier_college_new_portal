@@ -556,6 +556,9 @@ ActiveAdmin.register Student do
   action_item :edit, only: :show, priority: 0 do
     link_to 'Approve Student', edit_admin_student_path(student.id, page_name: 'approval')
   end
+  action_item :edit, only: :show, priority: 0 do
+    link_to 'Student Copy', student_copy_path(student, format: :pdf)
+  end
 
   show title: proc { |student|
     truncate("#{student.first_name.upcase} #{student.middle_name.upcase} #{student.last_name.upcase}",

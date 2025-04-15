@@ -208,7 +208,6 @@ GEM
     erubi (1.13.0)
     execjs (2.8.1)
     ffi (1.17.0)
-    ffi (1.17.0-arm64-darwin)
     flatpickr (4.6.11.0)
     font-awesome-rails (4.7.0.8)
       railties (>= 3.2, < 8.0)
@@ -300,6 +299,7 @@ GEM
     nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    ostruct (0.6.1)
     parallel (1.22.1)
     parser (3.1.2.1)
       ast (~> 2.4.1)
@@ -475,6 +475,10 @@ GEM
     websocket-extensions (0.1.5)
     whenever (1.0.0)
       chronic (>= 0.6.3)
+    wicked_pdf (2.8.2)
+      activesupport
+      ostruct
+    wkhtmltopdf-binary (0.12.6.8)
     xdan-datetimepicker-rails (2.5.4)
       jquery-rails
       rails (>= 3.2.16)
@@ -548,6 +552,8 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
   whenever
+  wicked_pdf
+  wkhtmltopdf-binary
 
 RUBY VERSION
    ruby 3.1.2p20

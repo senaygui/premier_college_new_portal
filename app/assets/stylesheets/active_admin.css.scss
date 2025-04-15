@@ -44,18 +44,18 @@ $menu-arrow-dark-icon-url: 'active_admin/nested_menu_arrow_dark.gif' !default;
 @import "font-awesome";
 
 // style for flat design
-// .panel h3 {
-//   color: #fff !important;
-// }
-// .table_tools_segmented_control li a{
-//   background: #038C3E !important;
-// }
-// .select2-dropdown {
-//     z-index: 3000
-// }
-// .search_select_filter .select2-container{
-//   min-width: 225px !important;
-// }
+.panel h3 {
+  color: #fff !important;
+}
+.table_tools_segmented_control li a{
+  background: #038C3E !important;
+}
+.select2-dropdown {
+    z-index: 3000
+}
+.search_select_filter .select2-container{
+  min-width: 225px !important;
+}
 // .header#header {
 //   height: calc(100% - 52px);
 // }
@@ -852,19 +852,19 @@ font-size: 14px;
   }
 }
 
-.filter_form_field{
-  display: flex;
-  justify-content: space-between;
-}
+// .filter_form_field{
+//   display: flex;
+//   justify-content: space-between;
+// }
 
-.filter_form_field label{
-font-size: 14px;
+// .filter_form_field label{
+// font-size: 14px;
 
-}
+// }
 
-.filter_form_field select{
-  font-size: 16px;
-}
+// .filter_form_field select{
+//   font-size: 16px;
+// }
 
 #payment-report-student-list{
   text-transform: capitalize;
