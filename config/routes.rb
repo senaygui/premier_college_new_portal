@@ -198,8 +198,8 @@ Rails.application.routes.draw do
   get 'graduation/approval', to: 'student_temporary#graduation_approval', as: 'graduation_approval'
   get 'graduation/approval/form', to: 'student_temporary#graduation_approval_form', as: 'graduation_approval_form'
   get 'approved', to: 'student_temporary#approved', as: 'approved'
-  get 'student/generate/copy', to: 'student_copy#index', as: 'student_copy'
-  post 'student_copy/generate_student_copy', as: 'generate_student_copy'
+  # get 'student/generate/copy', to: 'student_copy#index', as: 'student_copy'
+  # post 'student_copy/generate_student_copy', as: 'generate_student_copy'
 
   resources :student_copy
 
