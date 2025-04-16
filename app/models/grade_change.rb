@@ -33,7 +33,8 @@ class GradeChange < ApplicationRecord
       def current_grade
          if (department_approval == 'approved') && (registrar_approval == 'approved') && (dean_approval == 'approved') && (instructor_approval == 'approved') && (academic_affair_approval == 'approved')
           #  assessment.update(result: add_mark) if assessment.present?
-           student_grade.update(assesment_total: add_mark)
+           student_grade.skip_assessment_total_calc = true
+           student_grade.update!(assesment_total: add_mark)
            update_columns(current_result_total: student_grade.assesment_total)
            update_columns(current_letter_grade: student_grade.letter_grade)
          end
