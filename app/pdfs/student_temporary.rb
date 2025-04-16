@@ -15,7 +15,7 @@ class StudentTemporary < Prawn::Document
       move_down 30
       text 'This is to certify that', inline_format: true, size: 18, align: :center
       move_down 10
-      text "#{stud.name.full.upcase} #{stud.middle_name.upcase}", inline_format: true, size: 18, align: :center
+      text "#{stud.name.first_name.upcase} #{stud.middle_name.upcase} #{stud.name.last_name.upcase}", inline_format: true, size: 18, align: :center
       stroke_horizontal_rule
       move_down 20
       text 'Graduated from HOPE ENTERPRISE UNIVERSITY COLLEGE', inline_format: true, size: 18, align: :center

@@ -39,7 +39,7 @@ class StudentCopyController < ApplicationController
       respond_to do |format|
         format.html
         format.pdf do
-          render pdf: "student_copy_#{@student.id}",
+          render pdf: "student_copy_#{@student.first_name}",
                  template: 'student_copy/show',
                  layout: 'pdf'
         end
