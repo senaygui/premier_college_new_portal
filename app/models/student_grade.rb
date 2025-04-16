@@ -1,7 +1,7 @@
 class StudentGrade < ApplicationRecord
   after_create :generate_assessment
   # after_create -> { course_registration.active_no! }
-  # after_save :generate_grade
+  after_save :generate_grade
   after_create do
     Course.increment_counter(:f_counter, self) if letter_grade == 'F' || letter_grade == 'f'
   end
