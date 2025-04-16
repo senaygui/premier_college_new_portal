@@ -1,12 +1,14 @@
 class StudentGrade < ApplicationRecord
   after_create :generate_assessment
   # after_create -> { course_registration.active_no! }
-  after_save :generate_grade
+
   after_create do
     Course.increment_counter(:f_counter, self) if letter_grade == 'F' || letter_grade == 'f'
   end
   attr_accessor :skip_assessment_total_calc
-  after_save :update_subtotal , unless: -> { skip_assessment_total_calc }
+
+  after_save :update_subtotal, unless: -> { skip_assessment_total_calc }
+  after_save :generate_grade, if: -> { skip_assessment_total_calc }
   # after_save :add_course_registration
   # after_save :update_grade_report
   validates :student, presence: true
