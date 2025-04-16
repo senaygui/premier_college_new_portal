@@ -98,7 +98,9 @@ ActiveAdmin.register GradeChange do
                                           include_blank: false
             f.input :department_head_name, as: :hidden, input_html: { value: current_admin_user.name.full }
             f.input :department_head_date_of_response, as: :hidden, input_html: { value: Time.zone.now }
-            f.input :add_mark, label: 'Mark Added (Total Assesment 100%)'
+            if current_admin_user.role == 'department head'
+              f.input :add_mark, label: 'Mark Added (Total Assesment 100%)'
+            end
           end
           if (current_admin_user.role == 'registrar head') || (current_admin_user.role == 'admin')
             f.input :registrar_approval, as: :select, collection: %w[pending approved denied],
