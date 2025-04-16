@@ -103,11 +103,11 @@ class StudentGrade < ApplicationRecord
   def generate_grade
     if assessments.any?
       if assessments.where(result: nil).empty?
-        grade_in_letter = student.program.grade_systems.last.grades.where('min_row_mark <= ?', assesment_total1).where(
-          'max_row_mark >= ?', assesment_total1
+        grade_in_letter = student.program.grade_systems.last.grades.where('min_row_mark <= ?', assesment_total).where(
+          'max_row_mark >= ?', assesment_total
         ).last.letter_grade
-        grade_letter_value = student.program.grade_systems.last.grades.where('min_row_mark <= ?', assesment_total1).where(
-          'max_row_mark >= ?', assesment_total1
+        grade_letter_value = student.program.grade_systems.last.grades.where('min_row_mark <= ?', assesment_total).where(
+          'max_row_mark >= ?', assesment_total
         ).last.grade_point
         update_columns(letter_grade: grade_in_letter)
         update_columns(grade_point: grade_letter_value)
