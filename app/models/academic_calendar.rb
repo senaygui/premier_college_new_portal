@@ -2,11 +2,11 @@ class AcademicCalendar < ApplicationRecord
      # #validations
     validates :calender_year_in_gc, presence: true
     validates :calender_year_in_ec, presence: true
-     validates :calender_year, presence: true
-      validates :starting_date, presence: true
-      validates :ending_date, presence: true
-      validates :admission_type, presence: true
-      validates :study_level, presence: true
+    validates :calender_year, presence: true
+    validates :starting_date, presence: true
+    validates :ending_date, presence: true
+    validates :admission_type, presence: true
+    validates :study_level, presence: true
 
     # #scope
      scope :recently_added, -> { where('created_at >= ?', 1.week.ago) }

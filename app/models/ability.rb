@@ -28,7 +28,7 @@ class Ability
 
     when 'admin'
       # can :manage, ActiveAdmin::Page, name: "Calendar", namespace_name: "admin"
-      can :read, UneditableCurriculum
+      can %i[read update], UneditableCurriculum, created_at: (5.days.ago..)
       can :manage, Transfer
       can :manage, DocumentRequest
       can :manage, RecurringPayment
@@ -345,6 +345,7 @@ class Ability
       can :read, SemesterRegistration, admission_type: 'extention'
       can :manage, Invoice
     when 'department head'
+      can %i[read update], UneditableCurriculum, created_at: (5.days.ago..)
       can :read, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
       # can :manage, ActiveAdmin::Page, name: 'ExternalTransfer', namespace_name: 'admin'
       can :manage, ExternalTransfer, department_id: user.department_id
@@ -384,6 +385,7 @@ class Ability
       can %i[read update], AddAndDrop, department_id: user.department.id
       can %i[read update], MakeupExam, department_id: user.department.id
     when 'dean'
+      can %i[read update], UneditableCurriculum, created_at: (5.days.ago..)
       can :manage, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
       can %i[read update], Withdrawal, program: { department: { faculty_id: user.faculty_id } }
       can %i[read update], GradeReport, department: { faculty_id: user.faculty_id }
@@ -401,6 +403,7 @@ class Ability
       can :manage, Notice
       can :manage, Department, faculty_id: user.faculty_id
     when 'faculty dean'
+      can %i[read update], UneditableCurriculum, created_at: (5.days.ago..)
       can :manage, ActiveAdmin::Page, name: 'Dashboard', namespace_name: 'admin'
       can :manage, Department, faculty_id: user.faculty.id
      # can %i[read update destroy], Program, department_id: user.department.id
