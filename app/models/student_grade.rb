@@ -101,30 +101,47 @@ class StudentGrade < ApplicationRecord
   end
 
   def generate_grade
-    if assessments.any?
-      if assessments.where(result: nil).empty?
-        grade_in_letter = student.program.grade_systems.last.grades.where('min_row_mark <= ?', assesment_total).where(
-          'max_row_mark >= ?', assesment_total
-        ).last.letter_grade
-        grade_letter_value = student.program.grade_systems.last.grades.where('min_row_mark <= ?', assesment_total).where(
-          'max_row_mark >= ?', assesment_total
-        ).last.grade_point
-        update_columns(letter_grade: grade_in_letter)
-        update_columns(grade_point: grade_letter_value)
-      elsif assessments.where(result: nil, final_exam: true).present?
-        update_columns(letter_grade: 'NG')
-        # needs to be empty and after a week changes to f
-        update_columns(grade_point: 0)
-      elsif assessments.where(result: nil, final_exam: false).present?
-        update_columns(letter_grade: 'I')
-        # needs to be empty and after a week changes to f
-        update_columns(grade_point: 0)
-      end
+    return unless assessments.any?
+
+    if course.credit_hour < 0
+      process_negative_credit_grade
+    elsif course.credit_hour == 0
+      process_zero_credit_grade
     end
-    # self[:grade_in_letter] = grade_in_letter
   end
 
   private
+
+  def process_negative_credit_grade
+    if assessments.where(result: nil).empty?
+      grade = fetch_grade_by_score
+      update_columns(letter_grade: grade[:letter], grade_point: grade[:point])
+    elsif assessments.where(result: nil, final_exam: true).present?
+      update_columns(letter_grade: 'NG', grade_point: 0)
+    elsif assessments.where(result: nil, final_exam: false).present?
+      update_columns(letter_grade: 'I', grade_point: 0)
+    end
+  end
+
+  def process_zero_credit_grade
+    if assessments.where(result: nil).empty?
+      grade_letter = assesment_total > 40 ? 'P' : 'F'
+      update_columns(letter_grade: grade_letter, grade_point: 0)
+    elsif assessments.where(result: nil, final_exam: true).present?
+      update_columns(letter_grade: 'NG', grade_point: 0)
+    elsif assessments.where(result: nil, final_exam: false).present?
+      update_columns(letter_grade: 'I', grade_point: 0)
+    end
+  end
+
+  def fetch_grade_by_score
+    grade_system = student.program.grade_systems.last
+    grade = grade_system.grades
+                        .where('min_row_mark <= ? AND max_row_mark >= ?', assesment_total, assesment_total)
+                        .last
+
+    { letter: grade.letter_grade, point: grade.grade_point }
+  end
 
   # def generate_assessment
   #   course.assessment_plans.each do |plan|
