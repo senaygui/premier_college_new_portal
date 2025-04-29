@@ -1,6 +1,6 @@
 ActiveAdmin.register StudentGrade do
     menu parent: 'Grade'
-    permit_params :dean_approval_status,:instructor_submit_status, :instructor_name, :dean_head_name, :department_approval, :department_head_name, :department_head_date_of_response, :course_registration_id,
+    permit_params :dean_approval_status, :instructor_submit_status, :instructor_name, :dean_head_name, :department_approval, :department_head_name, :department_head_date_of_response, :course_registration_id,
                   :student_id, :letter_grade, :grade_point, :assesment_total, :grade_point, :course_id, assessments_attributes: %i[id student_grade_id assessment_plan_id student_id course_id result created_by updated_by _destroy]
 
      active_admin_import validate: true,
@@ -73,8 +73,8 @@ ActiveAdmin.register StudentGrade do
     end
     index do
       selectable_column
-      column 'full name', sortable: true do |n|
-        n.student.name.full
+      column 'Full Name', sortable: 'students.first_name' do |n|
+        [n.student.first_name, n.student.middle_name, n.student.last_name].compact.join(' ')
       end
       column 'Student ID' do |si|
         si.student.student_id

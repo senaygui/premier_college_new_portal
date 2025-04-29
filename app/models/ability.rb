@@ -101,7 +101,7 @@ class Ability
       can :manage, AssessmentPlan, admin_user_id: user.id
       can %i[read update], MakeupExam
       can :read, CourseRegistration, course_id: Course.instructor_courses(user.id)
-      can :manage, StudentGrade, course_id: Section.instructors(user.id)
+      can %i[read update], StudentGrade, course_id: Section.instructors(user.id)
       can %i[read destroy], StudentGrade, course_id: Course.instructor_courses(user.id)
       can :read, Notice
       can :read, StudentGrade, course_id: Course.instructor_courses(user.id)
@@ -110,7 +110,7 @@ class Ability
       can :destroy, StudentGrade do |grade|
         Course.instructor_courses(user.id).include?(grade.course_id) && grade.created_at >= 15.days.ago
       end
-      can :manage, Program
+      can :read, Program
       # cannot :destroy, StudentGrade
       # can %i[create read destroy], Assessment, admin_user_id: user.id
       can :manage, Attendance
