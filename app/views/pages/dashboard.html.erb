@@ -127,7 +127,9 @@
                       <td><%= grade.letter_grade || "N/A" %></td>
                       <td><%= grade.assesment_total || "N/A" %></td>
                       <td>
-                        <%= link_to 'Request Grade Change', new_grade_change_path(course_id: grade.course.id, grade_id: grade.id), class: 'btn btn-primary btn-sm' %>
+                        <%if GradeChange.where(student_id: current_student).last.instructor_approval != "pending" %>
+                          <%= link_to 'Request Grade Change', new_grade_change_path(course_id: grade.course.id, grade_id: grade.id), class: 'btn btn-primary btn-sm' %>
+                        <%end%>
                       </td>
                     </tr>
                   <% end %>
