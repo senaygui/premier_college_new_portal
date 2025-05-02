@@ -18,30 +18,31 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-set :output, "log/cron.log"
+set :output, 'log/cron.log'
 env :PATH, ENV['PATH']
-#
 every 1.month do
-	# command "echo 'you can use raw cron syntax too'"
- #  # command "/usr/bin/some_great_command"
+   # command "echo 'you can use raw cron syntax too'"
+  #  # command "/usr/bin/some_great_command"
   # runner "product_expired_notifications"
-  rake "bill:monthly"
+  rake 'bill:monthly'
   # rake "bill:half"
 end
 every 2.month do
-	# command "echo 'you can use raw cron syntax too'"
- #  # command "/usr/bin/some_great_command"
+   # command "echo 'you can use raw cron syntax too'"
+  #  # command "/usr/bin/some_great_command"
   # runner "product_expired_notifications"
-  rake "bill:half_semester"
+  rake 'bill:half_semester'
   # rake "bill:half"
 end
 every :day, at: '12:00am' do
-	# command "echo 'you can use raw cron syntax too'"
- #  # command "/usr/bin/some_great_command"
+   # command "echo 'you can use raw cron syntax too'"
+  #  # command "/usr/bin/some_great_command"
   # runner "product_expired_notifications"
-  rake "bill:starting_penalty_fee"
-  rake "bill:daily_penalty_fee"
+  rake 'bill:starting_penalty_fee'
+  rake 'bill:daily_penalty_fee'
   # rake "bill:half"
 end
 
-
+every 1.day, at: '2:00 am' do
+  rake 'student_grades:update_incomplete_grades'
+end

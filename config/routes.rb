@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get 'document_requests/create'
   get 'document_requests/show'
   get 'reports/course_assignments'
-  get 'grade_changes/new'
+  resources :grade_changes
   get 'grade_changes/create'
 
   resources :sections, except: [:index] do

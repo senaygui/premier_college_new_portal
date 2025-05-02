@@ -1,4 +1,8 @@
 class GradeChangesController < ApplicationController
+  def index
+    @grade_changes = GradeChange.where(student_id: current_student)
+  end
+
   def new
     @grade = StudentGrade.find(params[:grade_id])
     @course = @grade.course
@@ -11,6 +15,18 @@ class GradeChangesController < ApplicationController
     @academic_calendar = @student.academic_calendar
     @course_registration = @grade.course_registration
     # @assessment = @student.assessment
+  end
+
+  def show
+    @grade_change = GradeChange.find(params[:id])
+    @grade = @grade_change.student_grade
+    @course = @grade.course
+    @program = @course.program
+    @department = @program.department
+    @student = @grade.student
+    @section = @student.section
+    @academic_calendar = @student.academic_calendar
+    @course_registration = @grade.course_registration
   end
 
   def create

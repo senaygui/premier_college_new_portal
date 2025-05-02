@@ -1,0 +1,267 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Grade Change Request Details</h3>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <h5 class="text-muted mb-3">Student Information</h5>
+          <div class="mb-3">
+            <strong>Student Name:</strong>
+            <p class="mb-0"><%= @student.name.full %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Student ID:</strong>
+            <p class="mb-0"><%= @student.student_id %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Faculty:</strong>
+            <p class="mb-0"><%= @department.faculty.faculty_name %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Department:</strong>
+            <p class="mb-0"><%= @department.department_name %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Program:</strong>
+            <p class="mb-0"><%= @student.program.program_name %></p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h5 class="text-muted mb-3">Student Admission Information</h5>
+        
+          <div class="mb-3">
+            <strong>Admission Type:</strong>
+            <p class="mb-0"><%= @student.admission_type.titleize %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Study Level:</strong>
+            <p class="mb-0"><%= @student.study_level.titleize %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Year:</strong>
+            <p class="mb-0"><%= @student.year %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Semester:</strong>
+            <p class="mb-0"><%= @student.semester %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Section:</strong>
+            <p class="mb-0"><%= @section.section_full_name %></p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h5 class="text-muted mb-3">Course Information</h5>
+          <div class="mb-3">
+            <strong>Course:</strong>
+            <p class="mb-0"><%= @course.course_title %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Course Code:</strong>
+            <p class="mb-0"><%= @course.course_code %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Semester:</strong>
+            <p class="mb-0"><%= @course.semester %></p>
+          </div>
+          <div class="mb-3">
+            <strong>Year:</strong>
+            <p class="mb-0"><%= @course.year %></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-12">
+          <h5 class="text-muted mb-3">Grade Information</h5>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead class="thead-light">
+                <tr>
+                  <th>Previous Total</th>
+                  <th>Previous Letter Grade</th>
+                  <th>Add Mark</th>
+                  <th>Current Total</th>
+                  <th>Current Letter Grade</th>
+                  <th>Requested Assessment</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><%= @grade_change.previous_result_total %></td>
+                  <td><%= @grade_change.previous_letter_grade %></td>
+                  <td><%= @grade_change.add_mark %></td>
+                  <td><%= @grade_change.current_result_total %></td>
+                  <td><%= @grade_change.current_letter_grade %></td>
+                  <td><%= @grade_change.assessment.assessment_plan.assessment_title if @grade_change.assessment %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-12">
+          <h5 class="text-muted mb-3">Reason for Grade Change</h5>
+          <div class="card">
+            <div class="card-body">
+              <p class="mb-0"><%= @grade_change.reason %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-12">
+          <h5 class="text-muted mb-3">Approval Status</h5>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Instructor Approval -->
+        <div class="col-md-6 mb-3">
+          <div class="card h-100">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Instructor Approval</h6>
+                <div class="ms-auto">
+                  <span class="badge bg-<%= @grade_change.instructor_approval == 'pending' ? 'warning' : (@grade_change.instructor_approval == 'approved' ? 'success' : 'danger') %>">
+                    <%= @grade_change.instructor_approval.titleize %>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <% if @grade_change.instructor_approval != 'pending' %>
+                <p class="mb-1"><strong>Instructor:</strong> <%= @grade_change.instructor_name %></p>
+                <p class="mb-1"><strong>Date:</strong> <%= @grade_change.instructor_date_of_response&.strftime("%B %d, %Y %I:%M %p") %></p>
+                <p class="mb-0"><strong>Reason:</strong> <%= @grade_change.instructor_reason %></p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Department Head Approval -->
+        <div class="col-md-6 mb-3">
+          <div class="card h-100">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Department Head Approval</h6>
+                <div class="ms-auto">
+                  <span class="badge bg-<%= @grade_change.department_approval == 'pending' ? 'warning' : (@grade_change.department_approval == 'approved' ? 'success' : 'danger') %>">
+                    <%= @grade_change.department_approval.titleize %>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <% if @grade_change.department_approval != 'pending' %>
+                <p class="mb-1"><strong>Department Head:</strong> <%= @grade_change.department_head_name %></p>
+                <p class="mb-0"><strong>Date:</strong> <%= @grade_change.department_head_date_of_response&.strftime("%B %d, %Y %I:%M %p") %></p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dean Approval -->
+        <div class="col-md-6 mb-3">
+          <div class="card h-100">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Dean Approval</h6>
+                <div class="ms-auto">
+                  <span class="badge bg-<%= @grade_change.dean_approval == 'pending' ? 'warning' : (@grade_change.dean_approval == 'approved' ? 'success' : 'danger') %>">
+                    <%= @grade_change.dean_approval.titleize %>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <% if @grade_change.dean_approval != 'pending' %>
+                <p class="mb-1"><strong>Dean:</strong> <%= @grade_change.dean_name %></p>
+                <p class="mb-0"><strong>Date:</strong> <%= @grade_change.dean_date_of_response&.strftime("%B %d, %Y %I:%M %p") %></p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Registrar Approval -->
+        <div class="col-md-6 mb-3">
+          <div class="card h-100">
+            <div class="card-header">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">Registrar Approval</h6>
+                <div class="ms-auto">
+                  <span class="badge bg-<%= @grade_change.registrar_approval == 'pending' ? 'warning' : (@grade_change.registrar_approval == 'approved' ? 'success' : 'danger') %>">
+                    <%= @grade_change.registrar_approval.titleize %>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <% if @grade_change.registrar_approval != 'pending' %>
+                <p class="mb-1"><strong>Registrar:</strong> <%= @grade_change.registrar_name %></p>
+                <p class="mb-0"><strong>Date:</strong> <%= @grade_change.registrar_date_of_response&.strftime("%B %d, %Y %I:%M %p") %></p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-12">
+          <%= link_to 'Back', :back, class: 'btn btn-secondary' %>
+          <% if @grade_change.instructor_approval == 'pending' %>
+            <%= link_to 'Edit Request', edit_grade_change_path(@grade_change), class: 'btn btn-primary ms-2' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.5rem;
+  }
+  
+  .card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+  }
+  
+  .table {
+    margin-bottom: 0;
+  }
+  
+  .table thead th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+  }
+  
+  .alert {
+    border-radius: 0.375rem;
+  }
+  
+  .btn {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+  
+  .badge {
+    font-size: 0.875rem;
+    padding: 0.35em 0.65em;
+  }
+  
+  .card-header {
+    background-color: #f8f9fa;
+  }
+  
+  .card-header h6 {
+    font-weight: 600;
+  }
+</style>
