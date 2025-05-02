@@ -8,7 +8,7 @@ class StudentGrade < ApplicationRecord
   attr_accessor :skip_assessment_total_calc
 
   after_save :update_subtotal, unless: -> { skip_assessment_total_calc }
-  after_save :generate_grade, if: -> { skip_assessment_total_calc }
+  after_commit :generate_grade
   # after_save :add_course_registration
   # after_save :update_grade_report
   validates :student, presence: true
@@ -142,6 +142,8 @@ class StudentGrade < ApplicationRecord
   #     end
   #   end
   # end
+
+  private
 
   def update_grade_report
     if course_registration.semester_registration.grade_report.present?
