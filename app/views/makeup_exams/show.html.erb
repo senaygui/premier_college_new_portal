@@ -1,0 +1,61 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Makeup Exam Request Details</h4>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h5 class="text-muted mb-3">Student & Course Information</h5>
+          <div class="mb-2"><strong>Student Name:</strong> <%= @makeup_exam.student.name.full if @makeup_exam.student %></div>
+          <div class="mb-2"><strong>Student ID:</strong> <%= @makeup_exam.student.student_id if @makeup_exam.student %></div>
+          <div class="mb-2"><strong>Course:</strong> <%= @makeup_exam.course&.course_title %></div>
+          <div class="mb-2"><strong>Program:</strong> <%= @makeup_exam.program&.program_name %></div>
+          <div class="mb-2"><strong>Department:</strong> <%= @makeup_exam.department&.department_name %></div>
+          <div class="mb-2"><strong>Academic Year:</strong> <%= @makeup_exam.year %></div>
+          <div class="mb-2"><strong>Semester:</strong> <%= @makeup_exam.semester %></div>
+        </div>
+        <div class="col-md-6">
+          <h5 class="text-muted mb-3">Grade & Request Information</h5>
+          <div class="mb-2"><strong>Previous Total:</strong> <%= @makeup_exam.previous_result_total %></div>
+          <div class="mb-2"><strong>Previous Letter Grade:</strong> <%= @makeup_exam.previous_letter_grade %></div>
+          <div class="mb-2"><strong>Reason:</strong> <%= @makeup_exam.reason %></div>
+          <div class="mb-2"><strong>Status:</strong> 
+            <% if @makeup_exam.status == 'approved' %>
+              <span class="badge bg-success">Approved</span>
+            <% elsif @makeup_exam.status == 'denied' %>
+              <span class="badge bg-danger">Denied</span>
+            <% else %>
+              <span class="badge bg-warning">Pending</span>
+            <% end %>
+          </div>
+          <div class="mb-2"><strong>Created At:</strong> <%= @makeup_exam.created_at.strftime("%B %d, %Y") %></div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <%= link_to 'Back', makeup_exams_path, class: 'btn btn-secondary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.5rem;
+  }
+  .card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+  }
+  .badge {
+    font-size: 0.875rem;
+    padding: 0.35em 0.65em;
+  }
+  .btn {
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+</style> 

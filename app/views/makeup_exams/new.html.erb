@@ -1,9 +1,10 @@
-<h1 class="text-center my-4">Request Makeup Exam</h1>
-
-<div class="container">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <%= form_with model: @makeup_exam, local: true, html: { class: "form-horizontal", multipart: true } do |f| %>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Request Makeup Exam</h4>
+    </div>
+    <%= form_with model: @makeup_exam, local: true, html: { class: "form-horizontal", multipart: true } do |f| %>
+      <div class="card-body" style="background-color: #fff;">
         <% if @makeup_exam.errors.any? %>
           <div id="error_explanation" class="alert alert-danger">
             <h4 class="alert-heading"><%= pluralize(@makeup_exam.errors.count, "error") %> prohibited this makeup exam from being saved:</h4>
@@ -15,31 +16,65 @@
           </div>
         <% end %>
 
-        <div class="form-group">
-        <%= f.label :course_registration_id, "Select Course" %>
-        <%= f.collection_select :course_registration_id, @courses, :id, :course_title, prompt: "Select a course" %>
+        <div class="mb-4 form-group">
+          <%= f.label :course_registration_id, "Select Course", class: "form-label fw-bold" %>
+          <br />
+          <%= f.collection_select :course_registration_id, @courses, :id, :course_title, prompt: "Choose...", class: "form-select" %>
         </div>
 
-        <div class="form-group">
-          <%= f.label :reason, "Reason for Makeup Exam", class: "control-label" %>
-          <%= f.text_area :reason, class: "form-control", rows: 5 %>
+        <div class="mb-4">
+          <%= f.label :reason, "Reason for Makeup Exam", class: "form-label fw-bold" %>
+          <%= f.text_area :reason, class: "form-control form-control-lg", rows: 3, placeholder: "Describe your reason..." %>
         </div>
 
-        <div class="form-group">
-          <%= f.label :attachment, "Attach File (Optional)", class: "control-label" %>
-          <%= f.file_field :attachment, class: "form-control-file" %>
+        <div class="mb-4">
+          <%= f.label :attachment, "File input", class: "form-label fw-bold" %>
+          <div class="input-group">
+            <%= f.file_field :attachment, class: "form-control" %>
+          </div>
         </div>
+
 
         <%= f.hidden_field :year, value: current_student.year %>
         <%= f.hidden_field :semester, value: current_student.semester %>
-
-        <div class="form-group text-center">
-          <%= f.submit "Submit Request", class: "btn btn-primary" %>
-        </div>
-      <% end %>
-    </div>
+      </div>
+      <div class="card-footer bg-light">
+        <%= f.submit "Submit", class: "btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
 </div>
+
+<style>
+  .card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.75rem;
+  }
+  .card-header {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+  .form-label {
+    font-weight: 700;
+    color: #22223b;
+  }
+  .form-control-lg {
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.4rem;
+  }
+  .btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+  .card-footer {
+    border-radius: 0 0 0.75rem 0.75rem !important;
+    padding: 1.2rem;
+  }
+</style>
 
 
 

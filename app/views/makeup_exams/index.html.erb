@@ -1,0 +1,74 @@
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h3 class="mb-0">Makeup Exam Requests</h3>
+      <%= link_to 'New Request', new_makeup_exam_path, class: 'btn btn-danger text-white' %>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th>Course</th>
+              <th>Previous Grade</th>
+              <th>Reason</th>
+              <th>Status</th>
+              <th>Created At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @makeup_exams.each do |exam| %>
+              <tr>
+                <td><%= exam.course&.course_title %></td>
+                <td>
+                  <%= exam.previous_result_total %> (<%= exam.previous_letter_grade %>)
+                </td>
+                <td><%= truncate(exam.reason, length: 30) %></td>
+                <td>
+                  <% if exam.status == 'approved' %>
+                    <span class="badge bg-success">Approved</span>
+                  <% elsif exam.status == 'denied' %>
+                    <span class="badge bg-danger">Denied</span>
+                  <% else %>
+                    <span class="badge bg-warning">Pending</span>
+                  <% end %>
+                </td>
+                <td><%= exam.created_at.strftime("%B %d, %Y") %></td>
+                <td>
+                  <%= link_to 'View', makeup_exam_path(exam), class: 'btn btn-sm btn-info' %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.5rem;
+  }
+  .card-header {
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+  }
+  .table {
+    margin-bottom: 0;
+  }
+  .table thead th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+  }
+  .badge {
+    font-size: 0.875rem;
+    padding: 0.35em 0.65em;
+  }
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+</style> 
