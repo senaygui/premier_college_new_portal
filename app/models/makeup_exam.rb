@@ -44,7 +44,6 @@ class MakeupExam < ApplicationRecord
    end
 
    def generate_invoice_for_makeup_exam
-     unless other_payment.present?
        OtherPayment.create do |invoice|
          invoice.student_id = student.id
          invoice.academic_calendar_id = academic_calendar_id
@@ -66,7 +65,6 @@ class MakeupExam < ApplicationRecord
          invoice.total_price = CollegePayment.where(study_level: student.study_level,
                                                     admission_type: student.admission_type).first.makeup_exam_fee
        end
-     end
    end
 
    # def verified_status
