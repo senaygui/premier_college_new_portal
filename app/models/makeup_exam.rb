@@ -79,7 +79,7 @@ class MakeupExam < ApplicationRecord
    # end
 
    def makeup_exam_update_status
-     if other_payment.present? && (other_payment.payment_transaction.present? && (other_payment.payment_transaction.last.finance_approval_status == 'approved' && add_mark.present?))
+     if other_payment.present? && (other_payment.payment_transaction.present? && (other_payment.payment_transaction.finance_approval_status == 'approved' && add_mark.present?))
             assessment.where(student_grade_id: student_grade.id).where(final_exam: true).update(result: add_mark)
             student_grade.skip_assessment_total_calc = true
             student_grade.update(assesment_total: student_grade.assessments.sum(:result)) if student_grade.present?
