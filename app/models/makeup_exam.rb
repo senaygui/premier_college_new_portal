@@ -79,24 +79,25 @@ class MakeupExam < ApplicationRecord
    # end
 
    def makeup_exam_update_status
-     if payment_approved? && add_mark.present?
-       assessment.update(result: add_mark) if assessment.present?
-       student_grade.update(assesment_total: student_grade.assessments.sum(:result)) if student_grade.present?
-       update_columns(current_result_total: student_grade.assesment_total) if student_grade.present?
-       update_columns(current_letter_grade: student_grade.letter_grade) if student_grade.present?
-       update_columns(status: 'approved')
+     if other_payment.payment_transaction.present? && (other_payment.payment_transaction.last.finance_approval_status == 'approved' && add_mark.present?)
+          assessment.where(student_grade_id: student_grade.id).where(final_exam: true).update(result: add_mark)
+          student_grade.skip_assessment_total_calc = true
+          student_grade.update(assesment_total: student_grade.assessments.sum(:result)) if student_grade.present?
+          update_columns(current_result_total: student_grade.assesment_total) if student_grade.present?
+          update_columns(current_letter_grade: student_grade.letter_grade) if student_grade.present?
+          update_columns(status: 'approved')
      end
    end
 
-   def makeup_exam_update_status
-     if payment_approved? && add_mark.present?
-       assessment.update(result: add_mark) if assessment.present?
-       student_grade.update(assesment_total: student_grade.assessments.sum(:result)) if student_grade.present?
-       update_columns(current_result_total: student_grade.assesment_total) if student_grade.present?
-       update_columns(current_letter_grade: student_grade.letter_grade) if student_grade.present?
-       update_columns(status: 'approved')
-     end
-   end
+   #  def makeup_exam_update_status
+   #    if payment_approved? && add_mark.present?
+   #      assessment.update(result: add_mark) if assessment.present?
+   #      student_grade.update(assesment_total: student_grade.assessments.sum(:result)) if student_grade.present?
+   #      update_columns(current_result_total: student_grade.assesment_total) if student_grade.present?
+   #      update_columns(current_letter_grade: student_grade.letter_grade) if student_grade.present?
+   #      update_columns(status: 'approved')
+   #    end
+   #  end
 
    def approved_by_all?
      department_approval == 'approved' && registrar_approval == 'approved' &&
