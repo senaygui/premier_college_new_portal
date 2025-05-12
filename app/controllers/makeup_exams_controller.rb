@@ -14,7 +14,7 @@ class MakeupExamsController < ApplicationController
     @courses = CourseRegistration
                .where(student: current_student, enrollment_status: 'enrolled', semester: current_student.semester, year: current_student.year)
                .joins(:student_grade)
-               .where(student_grades: { letter_grade: %w[I NG] })
+               .where(student_grades: { letter_grade: %w[I] })
                .includes(:course)
   end
 
