@@ -1,5 +1,5 @@
 class PaymentTransactionsController < ApplicationController
-  before_action :set_payment_transaction, only: %i[ show edit update destroy ]
+  before_action :set_payment_transaction, only: %i[show edit update destroy]
 
   # GET /payment_transactions or /payment_transactions.json
   def index
@@ -7,14 +7,17 @@ class PaymentTransactionsController < ApplicationController
   end
 
   # GET /payment_transactions/1 or /payment_transactions/1.json
-  def show
-  end
+  def show; end
 
   # GET /payment_transactions/new
   def new
     @payment_transaction = PaymentTransaction.new
     @payment_method = PaymentMethod.find(params[:payment_method_id])
-    @invoice = Invoice.find(params[:invoice_id])
+    @invoice = if params[:invoice_id].present?
+                 Invoice.find(params[:invoice_id])
+               else
+                 OtherPayment.find(params[:other_payment_id])
+               end
   end
 
   # GET /payment_transactions/1/edit
@@ -29,7 +32,15 @@ class PaymentTransactionsController < ApplicationController
 
     respond_to do |format|
       if @payment_transaction.save
-        format.html { redirect_to invoice_path(@payment_transaction.invoiceable), notice: "Payment transaction was successfully created." }
+        format.html do
+          if @payment_transaction.invoiceable_type == 'Invoice'
+            redirect_to invoice_path(@payment_transaction.invoiceable),
+                        notice: 'Payment transaction was successfully created.'
+          else
+            redirect_to other_payment_path(@payment_transaction.invoiceable),
+                        notice: 'Payment transaction was successfully created.'
+          end
+        end
         format.json { render :show, status: :created, location: @payment_transaction }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -42,7 +53,7 @@ class PaymentTransactionsController < ApplicationController
   def update
     respond_to do |format|
       if @payment_transaction.update(payment_transaction_params)
-        format.html { redirect_to @payment_transaction, notice: "Payment transaction was successfully updated." }
+        format.html { redirect_to @payment_transaction, notice: 'Payment transaction was successfully updated.' }
         format.json { render :show, status: :ok, location: @payment_transaction }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -55,12 +66,13 @@ class PaymentTransactionsController < ApplicationController
   def destroy
     @payment_transaction.destroy
     respond_to do |format|
-      format.html { redirect_to payment_transactions_url, notice: "Payment transaction was successfully destroyed." }
+      format.html { redirect_to payment_transactions_url, notice: 'Payment transaction was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_payment_transaction
       @payment_transaction = PaymentTransaction.find(params[:id])
@@ -68,6 +80,7 @@ class PaymentTransactionsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def payment_transaction_params
-      params.fetch(:payment_transaction, {}).permit(:invoiceable_type, :invoiceable_id, :payment_method_id,:account_holder_fullname,:phone_number,:account_number,:transaction_reference,:finance_approval_status,:last_updated_by,:created_by, :receipt_image)
+      params.fetch(:payment_transaction, {}).permit(:invoiceable_type, :invoiceable_id, :payment_method_id,
+                                                    :account_holder_fullname, :phone_number, :account_number, :transaction_reference, :finance_approval_status, :last_updated_by, :created_by, :receipt_image)
     end
 end

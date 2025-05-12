@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :other_payments
   get 'readmissions/new'
   get 'readmissions/create'
   get 'readmissions/index'

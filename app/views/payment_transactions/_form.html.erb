@@ -31,8 +31,13 @@
 							<%= simple_form_for(@payment_transaction, local: true) do |f| %>
 							  <%= f.error_notification %>
 							  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-							  <%=f.input :invoiceable_type, as: :hidden, :input_html => { :value => "Invoice"}%>
-							  <%=f.input :invoiceable_id, as: :hidden, :input_html => { :value => params[:invoice_id]}%>
+							  <%if params[:invoice_id].present?%>
+								<%=f.input :invoiceable_type, as: :hidden, :input_html => { :value => "Invoice"}%>
+								<%=f.input :invoiceable_id, as: :hidden, :input_html => { :value => params[:invoice_id]}%>
+							  <%else%>
+							  	<%=f.input :invoiceable_type, as: :hidden, :input_html => { :value => "OtherPayment"}%>
+							  	<%=f.input :invoiceable_id, as: :hidden, :input_html => { :value => params[:other_payment_id]}%>
+							  <%end%>
                   <%=f.input :payment_method_id, as: :hidden, :input_html => { :value => params[:payment_method_id]}%>
 								<div class="bs-stepper-content">
 									<!-- your steps content here -->
@@ -49,8 +54,13 @@
 													</div>
 													<!-- /.card-header -->
 													<div class="card-body">
-														<p  class="text-center"><strong>Please, transfer <%=(@invoice.total_price + @invoice.registration_fee).round(2) if @invoice.present?%> ETB to the account we provide you and fill the form with in your bank information.</strong></p>   
-														<hr>
+														<%if params[:invoice_id].present?%>
+															<p  class="text-center"><strong>Please, transfer <%=(@invoice.total_price + @invoice.registration_fee).round(2) if @invoice.present?%> ETB to the account we provide you and fill the form with in your bank information.</strong></p>   
+															<hr>
+														<%else%>
+															<p  class="text-center"><strong>Please, transfer <%=(@invoice.total_price).round(2) if @invoice.present?%> ETB to the account we provide you and fill the form with in your bank information.</strong></p>   
+															<hr>
+														<%end%>
 													</div>
 													<!-- /.card-body -->
 												</div>

@@ -39,7 +39,11 @@
         <h5 class="card-title mt-2"><%= payment.bank_name %></h5>
       </div>
       <div class="card-footer text-muted">
-        <%= link_to 'View Transactions', { controller: "payment_transactions", action: "new", invoice_id: params[:invoice_id], payment_method_id: payment.id }, class: 'btn btn-primary btn-block' %>
+        <%if params[:invoice_id].present? %>
+          <%= link_to 'Use This Method', { controller: "payment_transactions", action: "new", invoice_id: params[:invoice_id], payment_method_id: payment.id }, class: 'btn btn-primary btn-block' %>
+        <%else%>
+          <%= link_to 'Use This Method', { controller: "payment_transactions", action: "new", other_payment_id: params[:other_payment_id], payment_method_id: payment.id }, class: 'btn btn-primary btn-block' %>
+        <%end%>
       </div>
     </div>
   <% end %>

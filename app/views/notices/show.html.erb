@@ -1,16 +1,108 @@
-<div class="container mt-4">
-  <div class="card">
-    <div class="card-header">
-      <h1 class="card-title"><%= @notice.title %></h1>
-    </div>
-    <div class="card-body">
-      <p class="card-text"><%= @notice.body %></p>
-    </div>
-    <div class="card-footer text-muted">
-      <small>Posted by: <%= @notice.posted_by %> <br> on <%= @notice.created_at.strftime("%B %d, %Y") %></small>
+<% provide(:title, @notice.title) %>
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1><%= @notice.title %></h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item"><%= link_to 'Notices', notices_path %></li>
+          <li class="breadcrumb-item active"><%= truncate(@notice.title, length: 30) %></li>
+        </ol>
+      </div>
     </div>
   </div>
-  <div class="mt-3">
-    <%= link_to 'Back to Notices', notices_path, class: 'btn btn-secondary' %>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Notice Details</h3>
+            <% if admin_user_signed_in? %>
+              <div class="card-tools">
+                <%= link_to edit_admin_notice_path(@notice), class: 'btn btn-tool' do %>
+                  <i class="fas fa-edit"></i>
+                <% end %>
+                <%= link_to admin_notice_path(@notice), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-tool text-danger' do %>
+                  <i class="fas fa-trash"></i>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          <div class="card-body">
+            <div class="notice-content">
+              <div class="notice-meta mb-4">
+                <p class="text-muted">
+                  <i class="fas fa-user me-2 mr-2"></i>Posted by: <%= @notice.posted_by %>
+                  <br>
+                  <i class="fas fa-calendar me-2 mr-2"></i>Posted on: <%= @notice.created_at.strftime("%B %d, %Y") %>
+                </p>
+              </div>
+              
+              <div class="notice-body">
+                <%= simple_format(@notice.body) %>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <%= link_to notices_path, class: 'btn btn-default' do %>
+              <i class="fas fa-arrow-left me-2 mr-2"></i>Back to Notices
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Quick Actions</h3>
+          </div>
+          <div class="card-body">
+            <div class="list-group">
+              <%= link_to notices_path, class: 'list-group-item list-group-item-action' do %>
+                <i class="fas fa-list me-2 mr-2"></i>All Notices
+              <% end %>
+              <% if admin_user_signed_in? %>
+                <%= link_to new_admin_notice_path, class: 'list-group-item list-group-item-action' do %>
+                  <i class="fas fa-plus me-2 mr-2"></i>Post New Notice
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</section>
+
+<style>
+  .notice-content {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .notice-meta {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+  }
+  
+  .notice-body {
+    white-space: pre-wrap;
+  }
+  
+  .card-tools .btn-tool {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    margin-left: 0.5rem;
+  }
+  
+  .card-tools .btn-tool:hover {
+    background-color: #f8f9fa;
+  }
+</style>

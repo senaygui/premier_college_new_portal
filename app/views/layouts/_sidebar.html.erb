@@ -25,6 +25,13 @@
             <p>Dashboard</p>
           </a>
         </li>
+        <!-- Notices -->
+        <li class="nav-item">
+          <%= link_to notices_path, class: "nav-link #{current_class?(notices_path)}", style: "color: #c2c7d0; transition: all 0.3s;" do %>
+            <i class="nav-icon fas fa-bullhorn" style="color: #adb5bd;"></i>
+            <p>Notices</p>
+          <% end %>
+        </li>
         <!-- Registrations -->
         <li class="nav-item">
           <%= link_to semester_registrations_path, :class => "nav-link #{current_class?(semester_registrations_path)}", style: "color: #c2c7d0; transition: all 0.3s;" do %>
@@ -46,26 +53,30 @@
             <p>Class Schedule</p>
           <% end %>
         </li>
-        <!-- Add Course -->
-        <li class="nav-item">
-          <a href="<%=add_courses_path%>" class="nav-link <%= current_class?(add_courses_path) %>" style="color: #c2c7d0; transition: all 0.3s;">
-            <i class="nav-icon fas fa-plus" style="color: #adb5bd;"></i>
-            <p>Add Course</p>
-          </a>
-        </li>
-        <!-- Drop Course -->
-        <li class="nav-item">
-          <a href="<%= drop_courses_path%>" class="nav-link <%= current_class?(drop_courses_path) %>" style="color: #c2c7d0; transition: all 0.3s;">
-            <i class="nav-icon fas fa-folder-minus" style="color: #adb5bd;"></i>
-            <p>Drop Course</p>
-          </a>
-        </li>
+        
         <!-- Payments -->
-        <li class="nav-item">
-          <%= link_to invoices_path, class: "nav-link #{current_class?(invoices_path)}", style: "color: #c2c7d0; transition: all 0.3s;" do %>
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link" style="color: #c2c7d0; transition: all 0.3s;">
             <i class="nav-icon fas fa-file-invoice" style="color: #adb5bd;"></i>
-            <p>Payments</p>
-          <%end%>
+            <p>
+              Payments
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <%= link_to invoices_path, class: "nav-link #{current_class?(invoices_path)}", style: "color: #c2c7d0; transition: all 0.3s;" do %>
+                <i class="nav-icon fas fa-file-invoice-dollar" style="color: #adb5bd;"></i>
+                <p>Registration & Tution Payments</p>
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to other_payments_path, class: "nav-link #{current_class?(other_payments_path)}", style: "color: #c2c7d0; transition: all 0.3s;" do %>
+                <i class="nav-icon fas fa-money-bill-wave" style="color: #adb5bd;"></i>
+                <p>Other Payments</p>
+              <% end %>
+            </li>
+          </ul>
         </li>
         <!-- Profile -->
         <li class="nav-item">
@@ -87,6 +98,37 @@
             <i class="nav-icon fas fa-file-word" style="color: #adb5bd;"></i>
             <p>Documents</p>
           <%end%>
+        </li>
+        <!-- Grade Changes -->
+        <li class="nav-item">
+          <%= link_to grade_changes_path, class: "nav-link #{current_class?(grade_changes_path)}", style: "color: #c2c7d0; transition: all 0.3s;" do %>
+            <i class="nav-icon fas fa-exchange-alt" style="color: #adb5bd;"></i>
+            <p>Grade Changes</p>
+          <% end %>
+        </li>
+        <!-- Add or Drop -->
+        <li class="nav-item has-treeview">
+          <a href="#" class="nav-link" style="color: #c2c7d0; transition: all 0.3s;">
+            <i class="nav-icon fas fa-random" style="color: #adb5bd;"></i>
+            <p>
+              Add Or Drop
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="<%= add_courses_path %>" class="nav-link <%= current_class?(add_courses_path) %>" style="color: #c2c7d0; transition: all 0.3s;">
+                <i class="nav-icon fas fa-plus" style="color: #adb5bd;"></i>
+                <p>Add Course</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="<%= drop_courses_path %>" class="nav-link <%= current_class?(drop_courses_path) %>" style="color: #c2c7d0; transition: all 0.3s;">
+                <i class="nav-icon fas fa-folder-minus" style="color: #adb5bd;"></i>
+                <p>Drop Course</p>
+              </a>
+            </li>
+          </ul>
         </li>
         <!-- Request Makeup Exam -->
         <li class="nav-item">
@@ -116,20 +158,8 @@
             <p>Readmission</p>
           <% end %>
         </li>
-        <!-- Notices -->
-        <li class="nav-item">
-          <%= link_to notices_path, class: "nav-link #{current_class?(notices_path)}", style: "color: #c2c7d0; transition: all 0.3s;" do %>
-            <i class="nav-icon fas fa-bullhorn" style="color: #adb5bd;"></i>
-            <p>Notices</p>
-          <% end %>
-        </li>
-        <!-- Grade Changes -->
-        <li class="nav-item">
-          <%= link_to grade_changes_path, class: "nav-link #{current_class?(grade_changes_path)}", style: "color: #c2c7d0; transition: all 0.3s;" do %>
-            <i class="nav-icon fas fa-exchange-alt" style="color: #adb5bd;"></i>
-            <p>Grade Changes</p>
-          <% end %>
-        </li>
+        
+        
         <!-- Logout -->
         <li class="nav-item" style="margin-top: auto;">
           <%= link_to destroy_student_session_path, method: :delete, class: "nav-link", style: "color: #c2c7d0; transition: all 0.3s;" do%>
@@ -179,6 +209,37 @@
     color: white !important;
   }
 
+  /* Subnav specific styles */
+  .nav-treeview .nav-link {
+    padding-left: 2.5rem;
+  }
+
+  .nav-treeview .nav-link.active {
+    background-color: #007bff !important;
+    color: #fff !important;
+  }
+
+  .nav-treeview .nav-link.active i {
+    color: #fff !important;
+  }
+
+  /* AdminLTE.io specific styles */
+  .nav-item.has-treeview.menu-open > .nav-link {
+    background-color: rgba(255,255,255,0.1);
+  }
+
+  .nav-item.has-treeview.menu-open > .nav-link i.right {
+    transform: rotate(-90deg);
+  }
+
+  .nav-treeview {
+    display: none;
+  }
+
+  .nav-item.has-treeview.menu-open > .nav-treeview {
+    display: block;
+  }
+
   .nav-item {
     margin-bottom: 0.2rem;
   }
@@ -197,5 +258,15 @@
 
   .nav-pills .nav-link p {
     margin: 0;
+  }
+
+  /* Active state for parent when child is active */
+  .nav-item.has-treeview > .nav-link.active {
+    background-color: #007bff;
+    color: white !important;
+  }
+
+  .nav-item.has-treeview > .nav-link.active i {
+    color: white !important;
   }
 </style>

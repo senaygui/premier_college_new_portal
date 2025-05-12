@@ -1,0 +1,192 @@
+<% provide(:title, "Other Payments") %>
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Other Payments</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item active">My Payments</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h3 class="card-title">Payment History</h3>
+          </div>
+
+          <div class="card-body">
+            <% if @other_payments.any? %>
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Invoice #</th>
+                      <th>Payment Type</th>
+                      <th>Amount</th>
+                      <th>Due Date</th>
+                      <th>Status</th>
+                      <th>Created At</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @other_payments.each do |payment| %>
+                      <tr>
+                        <td><%= payment.invoice_number %></td>
+                        <td>
+                          <% case payment.payable_type %>
+                          <% when "MakeupExam" %>
+                            <span class="badge badge-info">Makeup Exam</span>
+                          <% when "Readmission" %>
+                            <span class="badge badge-warning">Readmission</span>
+                          <% when "DocumentProcessing" %>
+                            <span class="badge badge-success">Document Processing</span>
+                          <% else %>
+                            <span class="badge badge-secondary"><%= payment.payable_type %></span>
+                          <% end %>
+                        </td>
+                        <td><%= number_to_currency(payment.total_price, unit: "ETB", format: "%n %u") %></td>
+                        <td><%= payment.due_date&.strftime("%b %d, %Y") %></td>
+                        <td>
+                          <% if payment.payment_transaction.present? %>
+                            <% case payment.payment_transaction.finance_approval_status %>
+                            <% when "pending" %>
+                              <span class="badge badge-warning">Pending Approval</span>
+                            <% when "approved" %>
+                              <span class="badge badge-success">Approved</span>
+                            <% when "denied" %>
+                              <span class="badge badge-danger">Denied</span>
+                            <% end %>
+                          <% else %>
+                            <span class="badge badge-secondary">Not Submitted</span>
+                          <% end %>
+                        </td>
+                        <td><%= payment.created_at.strftime("%b %d, %Y") %></td>
+                        <td>
+                          <div class="btn-group">
+                            <%= link_to other_payment_path(payment), class: "btn btn-sm btn-info" do %>
+                              <i class="fas fa-eye"></i> View
+                            <% end %>
+                            
+                            <% if payment.invoice_status == 'pending' && !payment.payment_transaction.present? %>
+                              <%= link_to edit_other_payment_path(payment), class: "btn btn-sm btn-primary" do %>
+                                <i class="fas fa-edit"></i> Edit
+                              <% end %>
+                              
+                              <%= link_to other_payment_path(payment), 
+                                  method: :delete, 
+                                  data: { confirm: 'Are you sure you want to cancel this payment?' },
+                                  class: "btn btn-sm btn-danger" do %>
+                                <i class="fas fa-trash"></i> Cancel
+                              <% end %>
+                            <% end %>
+                          </div>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+            <% else %>
+              <div class="alert alert-info">
+                <h5><i class="icon fas fa-info"></i> No Payments Found</h5>
+                <p>You haven't made any payments yet.</p>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="card-footer">
+            <%= link_to root_path, class: "btn btn-secondary" do %>
+              <i class="fas fa-arrow-left"></i> Back to Dashboard
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.card {
+  box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+  margin-bottom: 1rem;
+}
+
+.card-header {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0,0,0,.03);
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+
+.badge {
+  font-size: 0.875rem;
+  padding: 0.35em 0.65em;
+}
+
+.btn-group {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.alert {
+  margin-bottom: 0;
+}
+
+.card-footer {
+  background-color: rgba(0,0,0,.03);
+  border-top: 1px solid rgba(0,0,0,.125);
+  padding: 0.75rem 1.25rem;
+}
+
+/* Responsive table styles */
+@media (max-width: 768px) {
+  .table-responsive {
+    border: 0;
+  }
+  
+  .table-responsive thead {
+    display: none;
+  }
+  
+  .table-responsive tbody tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+  }
+  
+  .table-responsive tbody td {
+    display: block;
+    text-align: right;
+    padding: 0.75rem;
+    border: none;
+  }
+  
+  .table-responsive tbody td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+  }
+}
+</style>

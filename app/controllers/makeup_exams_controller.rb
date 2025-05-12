@@ -49,7 +49,7 @@ class MakeupExamsController < ApplicationController
     end
 
     if @makeup_exam.save
-      redirect_to payment_makeup_exam_path(@makeup_exam),
+      redirect_to edit_other_payment_path(OtherPayment.where(payable_type: 'MakeupExam').where(payable_id: @makeup_exam).last),
                   notice: 'Makeup exam request submitted successfully. Please proceed to payment.'
     else
       @courses = CourseRegistration

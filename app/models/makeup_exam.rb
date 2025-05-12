@@ -44,7 +44,7 @@ class MakeupExam < ApplicationRecord
    end
 
    def generate_invoice_for_makeup_exam
-     if approved_by_all? && !other_payment.present?
+     unless other_payment.present?
        OtherPayment.create do |invoice|
          invoice.student_id = student.id
          invoice.academic_calendar_id = academic_calendar_id
@@ -77,6 +77,16 @@ class MakeupExam < ApplicationRecord
    #	  Rails.logger.info "Conditions not met: department_approval: #{department_approval}, dean_approval: #{dean_approval}, instructor_approval: #{instructor_approval}, registrar_approval: #{registrar_approval}, academic_affair_approval: #{academic_affair_approval}"
    #	end
    # end
+
+   def makeup_exam_update_status
+     if payment_approved? && add_mark.present?
+       assessment.update(result: add_mark) if assessment.present?
+       student_grade.update(assesment_total: student_grade.assessments.sum(:result)) if student_grade.present?
+       update_columns(current_result_total: student_grade.assesment_total) if student_grade.present?
+       update_columns(current_letter_grade: student_grade.letter_grade) if student_grade.present?
+       update_columns(status: 'approved')
+     end
+   end
 
    def makeup_exam_update_status
      if payment_approved? && add_mark.present?

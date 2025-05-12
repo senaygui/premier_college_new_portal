@@ -1,0 +1,139 @@
+<% provide(:title, "Edit Payment") %>
+
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Edit Payment Information</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/">Home</a></li>
+          <li class="breadcrumb-item"><%= link_to "Payments", other_payments_path %></li>
+          <li class="breadcrumb-item active">Edit Payment</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h3 class="card-title">Payment Details</h3>
+          </div>
+
+          <div class="card-body">
+            <%= form_with(model: @other_payment, local: true) do |f| %>
+              <% if @other_payment.errors.any? %>
+                <div class="alert alert-danger">
+                  <h4><%= pluralize(@other_payment.errors.count, "error") %> prohibited this payment from being saved:</h4>
+                  <ul>
+                    <% @other_payment.errors.full_messages.each do |message| %>
+                      <li><%= message %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              <% end %>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <%= f.label :payment_type, class: "form-label" %>
+                    <%= f.text_field :payment_type, class: "form-control", readonly: true %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= f.label :invoice_number, class: "form-label" %>
+                    <%= f.text_field :invoice_number, class: "form-control", readonly: true %>
+                  </div>
+
+                  <div class="form-group">
+                    <%= f.label :total_price, class: "form-label" %>
+                    <%= f.number_field :total_price, class: "form-control", readonly: true %>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <%= f.fields_for :payment_transaction do |pt| %>
+                    <div class="form-group">
+                      <%= pt.label :payment_method_id, "Payment Method", class: "form-label" %>
+                      <%= pt.collection_select :payment_method_id, 
+                          PaymentMethod.all, 
+                          :id, 
+                          :bank_name, 
+                          { prompt: "Select payment method" }, 
+                          class: "form-control" %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= pt.label :account_holder_fullname, "Account Holder Name", class: "form-label" %>
+                      <%= pt.text_field :account_holder_fullname, class: "form-control" %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= pt.label :phone_number, "Phone Number", class: "form-label" %>
+                      <%= pt.telephone_field :phone_number, class: "form-control" %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= pt.label :account_number, "Account Number", class: "form-label" %>
+                      <%= pt.text_field :account_number, class: "form-control" %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= pt.label :transaction_reference, "Transaction Reference", class: "form-label" %>
+                      <%= pt.text_field :transaction_reference, class: "form-control" %>
+                    </div>
+
+                    <div class="form-group">
+                      <%= pt.label :receipt_image, "Receipt Image", class: "form-label" %>
+                      <%= pt.file_field :receipt_image, class: "form-control-file" %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+
+              <div class="card-footer">
+                <%= f.submit "Update Payment", class: "btn btn-primary" %>
+                <%= link_to "Cancel", @other_payment, class: "btn btn-secondary" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.card {
+  box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+  margin-bottom: 1rem;
+}
+
+.card-header {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0,0,0,.03);
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.form-control:read-only {
+  background-color: #e9ecef;
+}
+
+.card-footer {
+  background-color: rgba(0,0,0,.03);
+  border-top: 1px solid rgba(0,0,0,.125);
+  padding: 0.75rem 1.25rem;
+}
+</style>
