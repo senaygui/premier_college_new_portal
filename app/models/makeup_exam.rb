@@ -44,6 +44,7 @@ class MakeupExam < ApplicationRecord
    end
 
    def generate_invoice_for_makeup_exam
+     unless other_payment.present?
        OtherPayment.create do |invoice|
          invoice.student_id = student.id
          invoice.academic_calendar_id = academic_calendar_id
@@ -65,6 +66,7 @@ class MakeupExam < ApplicationRecord
          invoice.total_price = CollegePayment.where(study_level: student.study_level,
                                                     admission_type: student.admission_type).first.makeup_exam_fee
        end
+     end
    end
 
    # def verified_status
@@ -77,13 +79,13 @@ class MakeupExam < ApplicationRecord
    # end
 
    def makeup_exam_update_status
-     if other_payment.payment_transaction.present? && (other_payment.payment_transaction.last.finance_approval_status == 'approved' && add_mark.present?)
-          assessment.where(student_grade_id: student_grade.id).where(final_exam: true).update(result: add_mark)
-          student_grade.skip_assessment_total_calc = true
-          student_grade.update(assesment_total: student_grade.assessments.sum(:result)) if student_grade.present?
-          update_columns(current_result_total: student_grade.assesment_total) if student_grade.present?
-          update_columns(current_letter_grade: student_grade.letter_grade) if student_grade.present?
-          update_columns(status: 'approved')
+     if other_payment.present? && (other_payment.payment_transaction.present? && (other_payment.payment_transaction.last.finance_approval_status == 'approved' && add_mark.present?))
+            assessment.where(student_grade_id: student_grade.id).where(final_exam: true).update(result: add_mark)
+            student_grade.skip_assessment_total_calc = true
+            student_grade.update(assesment_total: student_grade.assessments.sum(:result)) if student_grade.present?
+            update_columns(current_result_total: student_grade.assesment_total) if student_grade.present?
+            update_columns(current_letter_grade: student_grade.letter_grade) if student_grade.present?
+            update_columns(status: 'approved')
      end
    end
 
