@@ -113,9 +113,9 @@ class StudentGrade < ApplicationRecord
           grade_point: grade.grade_point
         )
       elsif assessments.where(result: nil, final_exam: true).present?
-        update_columns(letter_grade: 'NG', grade_point: 0)
-      elsif assessments.where(result: nil, final_exam: false).present?
         update_columns(letter_grade: 'I', grade_point: 0)
+      elsif assessments.where(result: nil, final_exam: false).present?
+        update_columns(letter_grade: 'NG', grade_point: 0)
       end
 
     elsif course.credit_hour == 0
