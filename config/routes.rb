@@ -206,6 +206,7 @@ Rails.application.routes.draw do
 
   get 'new/semester/registration', to: 'pages#enrollement', as: 'enrollement'
   get 'added/course/registration', to: 'pages#add_enrollement', as: 'add_enrollement'
+  post 'added/course/registration', to: 'pages#add_enrollement'
 
   # post "added/course/registration", to: "pages#added_course_registration", as: "added_course_registration"
   post 'create/semester/registration/(:out_of_batch)', to: 'pages#create_semester_registration',
