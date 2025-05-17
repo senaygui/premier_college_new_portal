@@ -169,7 +169,7 @@
          <div>
             <% if current_student.get_added_course.sum{|add| add.credit_hour} <= @allowed_credit_hour%>
               <p> 
-                <%= link_to "Register Course", add_enrollement_path, class: 'btn-sm btn-primary'%>
+                <%= link_to "Register Course", add_enrollement_path, method: :post, class: 'btn-sm btn-primary'%>
                </p>  
               <%else%>
               <p> 

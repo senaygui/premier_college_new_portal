@@ -26,13 +26,13 @@ class PagesController < ApplicationController
     @smr = current_student.semester_registrations.where(year: current_student.year,
                                                         semester: current_student.semester).last
     @payment_remaining = current_student.semester_registrations.where('remaining_amount > ?', 0).last if @smr.nil?
-    
-    @student_grades = StudentGrade.eager_load(:course_registration).
-    where('course_registrations.year=?', current_student.year).
-    where('course_registrations.semester=?', current_student.semester).
-    where(student: current_student).includes(:course)
 
-   # @verified_makeup_exam = MakeupExam.find_by(student_id: current_student.id, verified: true)
+    @student_grades = StudentGrade.eager_load(:course_registration)
+                                  .where('course_registrations.year=?', current_student.year)
+                                  .where('course_registrations.semester=?', current_student.semester)
+                                  .where(student: current_student).includes(:course)
+
+    # @verified_makeup_exam = MakeupExam.find_by(student_id: current_student.id, verified: true)
   end
 
   def enrollement
@@ -48,6 +48,33 @@ class PagesController < ApplicationController
   def add_enrollement
     @total_course = current_student.get_added_course
     @tution_fee = current_student.get_added_tution_fee
+    @semester_registration = current_student.semester_registrations.where(year: current_student.year,
+                                                                          semester: current_student.semester).last
+
+    if @semester_registration
+      @total_course.each do |course|
+        course_registration = CourseRegistration.new(
+          semester_registration_id: @semester_registration.id,
+          program_id: current_student.program.id,
+          department_id: current_student.department.id,
+          academic_calendar_id: @semester_registration.academic_calendar_id,
+          student_id: current_student.id,
+          student_full_name: current_student.full_name,
+          course_id: course.course.id,
+          academic_year: @semester_registration.get_academic_year(@semester_registration.semester, current_student),
+          course_title: course.course.course_title,
+          semester: @semester_registration.semester,
+          year: @semester_registration.year,
+          created_by: current_student.id
+        )
+
+        course.update(status: :taken) if course_registration.save
+      end
+
+      redirect_to dashboard_path, notice: 'Courses were successfully added to your registration.'
+    else
+      redirect_to dashboard_path, alert: 'No active semester registration found.'
+    end
   end
 
   def create_semester_registration
@@ -70,18 +97,17 @@ class PagesController < ApplicationController
     end
   end
 
-  private
+   private
 
   def passed_all_prerequisites?(student, course)
     prerequisites = Prerequisite.where(course_id: course.id)
-  
+
     prerequisites.all? do |prerequisite|
       prerequisite_course = prerequisite.prerequisite
       student_grade = StudentGrade.find_by(student_id: student.id, course_id: prerequisite_course.id)
-  
+
       # First check if student_grade is nil; if not, then check if the grade is not 'F'
       student_grade.nil? || student_grade.letter_grade != 'F'
     end
   end
-  
- end 
+end
