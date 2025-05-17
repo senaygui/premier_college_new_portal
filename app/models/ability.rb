@@ -86,7 +86,7 @@ class Ability
       can :manage, Almuni
       can :manage, Withdrawal
       can :manage, AddAndDrop
-      can %i[read update], Dropcourse
+      can %i[read update destroy], Dropcourse
       can %i[read update], AddCourse
       # can :manage, Assessment
       can :manage, OtherPayment
