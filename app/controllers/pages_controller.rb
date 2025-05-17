@@ -61,7 +61,7 @@ class PagesController < ApplicationController
           student_id: current_student.id,
           student_full_name: current_student.full_name,
           course_id: course.course.id,
-          academic_year: @semester_registration.get_academic_year(@semester_registration.semester, current_student),
+          academic_year: @semester_registration.academic_calendar.calender_year_in_gc,
           course_title: course.course.course_title,
           semester: @semester_registration.semester,
           year: @semester_registration.year,
