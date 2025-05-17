@@ -71,9 +71,9 @@ class PagesController < ApplicationController
         course.update(status: :taken) if course_registration.save
       end
 
-      redirect_to dashboard_path, notice: 'Courses were successfully added to your registration.'
+      redirect_to root_path, notice: 'Courses were successfully added to your registration.'
     else
-      redirect_to dashboard_path, alert: 'No active semester registration found.'
+      redirect_to root_path, alert: 'No active semester registration found.'
     end
   end
 
