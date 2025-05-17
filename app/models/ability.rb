@@ -87,7 +87,7 @@ class Ability
       can :manage, Withdrawal
       can :manage, AddAndDrop
       can %i[read update destroy], Dropcourse
-      can %i[read update], AddCourse
+      can %i[read update destroy], AddCourse
       # can :manage, Assessment
       can :manage, OtherPayment
       can :manage, StudentGrade
