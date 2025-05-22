@@ -1,29 +1,62 @@
-<%= form_with(model: @document_request, url: upload_receipt_document_request_path(@document_request), local: true, method: :patch, html: { multipart: true }) do |form| %>
-  <% if @document_request.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@document_request.errors.count, "error") %> prohibited this document request from being saved:</h2>
-      <ul>
-        <% @document_request.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<%provide(:title, "Upload Payment Receipt")%>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Upload Payment Receipt</h4>
     </div>
-  <% end %>
-  
-  <% if @fee.present? %>
-    <ul>
-      <li>Fee for <%= @document_request.document_type %>: <%= @fee %>ETB</li>
-    </ul>
-  <% else %>
-    <p>No payment information available for the selected document type.</p>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :receipt %>
-    <%= form.file_field :receipt, class: "form-control" %>
+    <%= form_with(model: @document_request, url: upload_receipt_document_request_path(@document_request), local: true, method: :patch, html: { multipart: true, class: "form-horizontal" }) do |form| %>
+      <div class="card-body" style="background-color: #fff;">
+        <% if @document_request.errors.any? %>
+          <div id="error_explanation" class="alert alert-danger">
+            <h4 class="alert-heading"><%= pluralize(@document_request.errors.count, "error") %> prohibited this document request from being saved:</h4>
+            <ul>
+              <% @document_request.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <% if @fee.present? %>
+          <ul class="mb-4">
+            <li>Fee for <%= @document_request.document_type %>: <strong><%= @fee %> ETB</strong></li>
+          </ul>
+        <% else %>
+          <p class="mb-4">No payment information available for the selected document type.</p>
+        <% end %>
+        <div class="mb-3 form-group">
+          <%= form.label :receipt, class: "form-label fw-bold d-block mb-2" %>
+          <%= form.file_field :receipt, class: "form-control w-100" %>
+        </div>
+      </div>
+      <div class="card-footer bg-light">
+        <%= form.submit 'Upload Receipt', class: "btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
+</div>
 
-  <div class="actions">
-    <%= form.submit 'Upload Receipt', class: "btn btn-primary" %>
-  </div>
-<% end %>
+<style>
+  .card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.75rem;
+  }
+  .card-header {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+  .form-label {
+    font-weight: 700;
+    color: #22223b;
+  }
+  .btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+  .card-footer {
+    border-radius: 0 0 0.75rem 0.75rem !important;
+    padding: 1.2rem;
+  }
+</style>

@@ -1,14 +1,48 @@
 <!-- app/views/document_requests/track_form.html.erb -->
-<h1>Track Document Request</h1>
-
-<%= form_with url: track_document_requests_path, method: :post, local: true do |form| %>
-  <div class="field">
-    <%= form.label :track_number, "Track Number:" %>
-    <%= form.text_field :track_number %>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Track Document Request</h4>
+    </div>
+    <div class="card-body" style="background-color: #fff;">
+      <%= form_with url: track_document_requests_path, method: :post, local: true do |form| %>
+        <div class="mb-3 form-group">
+          <%= form.label :track_number, "Track Number:", class: "form-label fw-bold d-block mb-2" %>
+          <%= form.text_field :track_number, class: "form-control w-100" %>
+        </div>
+        <div class="mb-3">
+          <%= form.submit "Track", class: "btn btn-primary w-100" %>
+        </div>
+      <% end %>
+      <div class="text-center mt-3">
+        <%= link_to 'Back to Home', root_path, class: "btn btn-link" %>
+      </div>
+    </div>
   </div>
-  <div class="actions">
-    <%= form.submit "Track" %>
-  </div>
-<% end %>
+</div>
 
-<%= link_to 'Back to Home', root_path %>
+<style>
+  .card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.75rem;
+  }
+  .card-header {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+  .form-label {
+    font-weight: 700;
+    color: #22223b;
+  }
+  .btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+  .card-footer {
+    border-radius: 0 0 0.75rem 0.75rem !important;
+    padding: 1.2rem;
+  }
+</style>

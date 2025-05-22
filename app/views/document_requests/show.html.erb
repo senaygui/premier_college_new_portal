@@ -1,69 +1,141 @@
-<h1>Document Request Status</h1>
+<%provide(:title, "#{@document_request.document_type} Document Request Status")%>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Document Request Status (<%= @document_request.document_type %>)</h4>
+    
+    </div>
+    <div class="card-body" style="background-color: #fff;">
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <div class="alert alert-info d-flex align-items-center" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            <span>
+              Please <strong>copy your document tracker number</strong> below. You will need it to track your request status in the future.
+            </span>
+          </div>
+          <% status = @document_request.status.to_s.strip.downcase.presence || 'pending' %>
+          <% if status == 'approved' %>
+            <div class="alert alert-success mt-3" role="alert">
+              <i class="fas fa-check-circle me-2"></i>
+              Your document is approved. Please come to the campus registrar office to collect your document.
+            </div>
+          <% elsif status == 'rejected' || status == 'denied' %>
+            <div class="alert alert-danger mt-3" role="alert">
+              <i class="fas fa-times-circle me-2"></i>
+              Your payment is not correct or there is an issue with your request. Please contact the registrar office at <a href="tel:+251912345678">+251 912 345 678</a>.
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <label class="form-label fw-bold">Track number:</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control bg-light" id="trackNumber" value="<%= @document_request.track_number %>" readonly>
+            <button class="btn btn-outline-secondary" type="button" id="copyTrackNumber">Copy</button>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Document Status:</label>
+          <% status = @document_request.status.to_s.strip.downcase.presence || 'pending' %>
+          <% badge_class = case status
+              when 'approved' then 'bg-success'
+              when 'pending' then 'bg-warning text-dark'
+              when 'rejected', 'denied' then 'bg-danger'
+              else 'bg-secondary'
+            end %>
+          <h2>
+            <span class="badge <%= badge_class %> fs-6"><%= status.capitalize %></span>
+          </h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">First name:</label>
+          <div class="form-control bg-light"><%= @document_request.first_name %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Middle name:</label>
+          <div class="form-control bg-light"><%= @document_request.middle_name %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Last name:</label>
+          <div class="form-control bg-light"><%= @document_request.last_name %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Mobile number:</label>
+          <div class="form-control bg-light"><%= @document_request.mobile_number %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Email:</label>
+          <div class="form-control bg-light"><%= @document_request.email %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Admission type:</label>
+          <div class="form-control bg-light"><%= @document_request.admission_type %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Study level:</label>
+          <div class="form-control bg-light"><%= @document_request.study_level %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Program:</label>
+          <div class="form-control bg-light"><%= Program.find(@document_request.program).program_name %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Department:</label>
+          <div class="form-control bg-light"><%= Department.find(@document_request.department).department_name %></div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-bold">Student status:</label>
+          <div class="form-control bg-light"><%= @document_request.student_status %></div>
+        </div>
+        <% if @document_request.student_status == 'Graduated' %>
+          <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Year of graduation:</label>
+            <div class="form-control bg-light"><%= @document_request.year_of_graduation %></div>
+          </div>
+        <% end %>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
-<p>
-  <strong>First name:</strong>
-  <%= @document_request.first_name %>
-</p>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var copyBtn = document.getElementById('copyTrackNumber');
+    var trackInput = document.getElementById('trackNumber');
+    if (copyBtn && trackInput) {
+      copyBtn.addEventListener('click', function() {
+        trackInput.select();
+        trackInput.setSelectionRange(0, 99999); // For mobile devices
+        document.execCommand('copy');
+        copyBtn.textContent = 'Copied!';
+        setTimeout(function() { copyBtn.textContent = 'Copy'; }, 1500);
+      });
+    }
+  });
+</script>
 
-<p>
-  <strong>Middle name:</strong>
-  <%= @document_request.middle_name %>
-</p>
-
-<p>
-  <strong>Last name:</strong>
-  <%= @document_request.last_name %>
-</p>
-
-<p>
-  <strong>Mobile number:</strong>
-  <%= @document_request.mobile_number %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @document_request.email %>
-</p>
-
-<p>
-  <strong>Admission type:</strong>
-  <%= @document_request.admission_type %>
-</p>
-
-<p>
-  <strong>Study level:</strong>
-  <%= @document_request.study_level %>
-</p>
-
-<p>
-  <strong>Program:</strong>
-  <%= @document_request.program %>
-</p>
-
-<p>
-  <strong>Department:</strong>
-  <%= @document_request.department %>
-</p>
-
-<p>
-  <strong>Student status:</strong>
-  <%= @document_request.student_status %>
-</p>
-
-<% if @document_request.student_status == 'Graduated' %>
-  <p>
-    <strong>Year of graduation:</strong>
-    <%= @document_request.year_of_graduation %>
-  </p>
-<% end %>
-
-
-<p>
-  <strong>Track number:</strong>
-  <%= @document_request.track_number %>
-</p>
-
-<p>
-  <strong>Status:</strong>
-  <%= @document_request.status %>
-</p>
+<style>
+  .card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.75rem;
+  }
+  .card-header {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+  .form-label {
+    font-weight: 700;
+    color: #22223b;
+  }
+  .form-control[readonly] {
+    background-color: #f8f9fa;
+    opacity: 1;
+  }
+</style>

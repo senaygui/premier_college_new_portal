@@ -12,7 +12,7 @@ class CreateDocumentRequests < ActiveRecord::Migration[7.0]
       t.string :department
       t.string :student_status
       t.integer :year_of_graduation
-      t.string :status
+      t.string :status, default: 'pending'
       t.string :track_number
 
       t.timestamps

@@ -1,85 +1,88 @@
-<h1>New Document Request</h1>
-
-<%= form_with(model: @document_request, local: true) do |form| %>
-  <% if @document_request.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@document_request.errors.count, "error") %> prohibited this document request from being saved:</h2>
-
-      <ul>
-        <% @document_request.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<%provide(:title, "#{params[:document_type]}")%>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">New Document Request (<%= params[:document_type] %>)</h4>
     </div>
-  <% end %>
+    <%= form_with(model: @document_request, local: true, html: { class: "form-horizontal" }) do |form| %>
+      <div class="card-body" style="background-color: #fff;">
+        <% if @document_request.errors.any? %>
+          <div id="error_explanation" class="alert alert-danger">
+            <h4 class="alert-heading"><%= pluralize(@document_request.errors.count, "error") %> prohibited this document request from being saved:</h4>
+            <ul>
+              <% @document_request.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-  <!-- Hidden field to carry the document_type -->
-  <%= form.hidden_field :document_type %>
+        <%= form.hidden_field :document_type %>
 
-  <div class="field">
-    <%= form.label :first_name %>
-    <%= form.text_field :first_name %>
+        <div class="mb-3 form-group">
+          <%= form.label :first_name, class: "form-label fw-bold" %>
+          <%= form.text_field :first_name, class: "form-control" %>
+        </div>
+
+        <div class="mb-3 form-group">
+          <%= form.label :middle_name, class: "form-label fw-bold" %>
+          <%= form.text_field :middle_name, class: "form-control" %>
+        </div>
+
+        <div class="mb-3 form-group">
+          <%= form.label :last_name, class: "form-label fw-bold" %>
+          <%= form.text_field :last_name, class: "form-control" %>
+        </div>
+
+        <div class="mb-3 form-group">
+          <%= form.label :mobile_number, class: "form-label fw-bold" %>
+          <%= form.text_field :mobile_number, class: "form-control" %>
+        </div>
+
+        <div class="mb-3 form-group">
+          <%= form.label :email, class: "form-label fw-bold" %>
+          <%= form.email_field :email, class: "form-control" %>
+        </div>
+
+        <div class="mb-3 form-group">
+          <%= form.label :admission_type, class: "form-label fw-bold d-block mb-2" %>
+          <%= form.select :admission_type, ['regular', 'extension'], {}, { class: "form-select w-100" } %>
+        </div>
+
+        <div class="mb-3 form-group">
+          <%= form.label :study_level, class: "form-label fw-bold d-block mb-2" %>
+          <%= form.select :study_level, ['undergraduate', 'graduate'], {}, { class: "form-select w-100" } %>
+        </div>
+        <div class="mb-3 form-group">
+          <%= form.label :department, class: "form-label fw-bold d-block mb-2" %>
+          <%= form.select :department, Department.all.map { |department| [department.department_name, department.id] }, {}, { class: "form-select w-100" } %>
+        </div>
+        <div class="mb-3 form-group">
+          <%= form.label :program, class: "form-label fw-bold d-block mb-2" %>
+          <%= form.select :program, Program.all.map { |program| [program.program_name, program.id] }, {}, { class: "form-select w-100" } %>
+        </div>
+
+        <div class="mb-3 form-group">
+          <%= form.label :student_status, class: "form-label fw-bold d-block mb-2" %>
+          <%= form.select :student_status, ['Active', 'Inactive', 'Graduated'], {}, { class: "form-select w-100", onchange: "showGraduationYear(this)" } %>
+        </div>
+
+        <div class="mb-3 form-group" id="graduation_year_field" style="display: none;">
+          <%= form.label :year_of_graduation, class: "form-label fw-bold d-block mb-2" %>
+          <%= form.date_select :year_of_graduation, { start_year: 1900, end_year: Time.now.year }, { class: "form-select w-100" } %>
+        </div>
+
+        <div class="mb-3 form-group">
+          <%= form.label :document, class: "form-label fw-bold" %>
+          <%= form.file_field :document, class: "form-control" %>
+        </div>
+      </div>
+      <div class="card-footer bg-light">
+        <%= form.submit "Submit", class: "btn btn-primary" %>
+      </div>
+    <% end %>
   </div>
-
-  <div class="field">
-    <%= form.label :middle_name %>
-    <%= form.text_field :middle_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :last_name %>
-    <%= form.text_field :last_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :mobile_number %>
-    <%= form.text_field :mobile_number %>
-  </div>
-
-  <div class="field">
-    <%= form.label :email %>
-    <%= form.email_field :email %>
-  </div>
-
-  <div class="field">
-    <%= form.label :admission_type %>
-    <%= form.select :admission_type, ['Regular', 'Extension'] %>
-  </div>
-
-  <div class="field">
-    <%= form.label :study_level %>
-    <%= form.select :study_level, ['undergraduate', 'graduate'] %>
-  </div>
-
-  <div class="field">
-    <%= form.label :program %>
-    <%= form.select :program, ['Environmental Science and Sustainable Development', 'Food Science and Technology', 'Business Management and Entrepreneurship', 'Marketing Management Regular', 'Computer Science Regular', 'Information Systems Regular', 'Information Technology Regular', 'Management Regular', 'Architecture Regular', 'Accounting & Finance Regular'] %>
-  </div>
-
-  <div class="field">
-    <%= form.label :department %>
-    <%= form.select :department, ['Environmental Science and Sustainable Development', 'Food Science and Technology', 'Information Systems', 'Accounting & Finance', 'Management', 'Master of Arts in Organizational Leadership Program', 'Information Technology', 'Marketing Management', 'Business Management and Entrepreneurship', 'Architecture', 'Division of Common Courses', 'Masters of Business Administration', 'Computer Science'] %>
-  </div>
-
-  <div class="field">
-    <%= form.label :student_status %>
-    <%= form.select :student_status, ['Active', 'Inactive', 'Graduated'], {}, { onchange: "showGraduationYear(this)" } %>
-  </div>
-
-  <div class="field" id="graduation_year_field" style="display: none;">
-    <%= form.label :year_of_graduation %>
-    <%= form.date_select :year_of_graduation, start_year: 1900, end_year: Time.now.year %>
-  </div>
-
-  <div class="field">
-    <%= form.label :document %>
-    <%= form.file_field :document %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+</div>
 
 <script>
   function showGraduationYear(select) {
@@ -90,4 +93,80 @@
       field.style.display = 'none';
     }
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const departmentSelect = document.getElementById('document_request_department');
+    const programSelect = document.getElementById('document_request_program');
+
+    // Insert error message containers
+    if (departmentSelect && !document.getElementById('department-error')) {
+      const errorDiv = document.createElement('div');
+      errorDiv.id = 'department-error';
+      errorDiv.className = 'text-danger mt-1';
+      departmentSelect.parentNode.appendChild(errorDiv);
+    }
+    if (programSelect && !document.getElementById('program-error')) {
+      const errorDiv = document.createElement('div');
+      errorDiv.id = 'program-error';
+      errorDiv.className = 'text-danger mt-1';
+      programSelect.parentNode.appendChild(errorDiv);
+    }
+
+    form.addEventListener('submit', function(e) {
+      let valid = true;
+      // Validate department
+      if (departmentSelect && (!departmentSelect.value || departmentSelect.value === '')) {
+        document.getElementById('department-error').textContent = 'Please select a department.';
+        departmentSelect.classList.add('is-invalid');
+        valid = false;
+      } else {
+        document.getElementById('department-error').textContent = '';
+        departmentSelect.classList.remove('is-invalid');
+      }
+      // Validate program
+      if (programSelect && (!programSelect.value || programSelect.value === '')) {
+        document.getElementById('program-error').textContent = 'Please select a program.';
+        programSelect.classList.add('is-invalid');
+        valid = false;
+      } else {
+        document.getElementById('program-error').textContent = '';
+        programSelect.classList.remove('is-invalid');
+      }
+      if (!valid) {
+        e.preventDefault();
+      }
+    });
+  });
 </script>
+
+<style>
+  .card {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.75rem;
+  }
+  .card-header {
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+  }
+  .form-label {
+    font-weight: 700;
+    color: #22223b;
+  }
+  .form-control-lg {
+    font-size: 1.1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.4rem;
+  }
+  .btn {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+  }
+  .card-footer {
+    border-radius: 0 0 0.75rem 0.75rem !important;
+    padding: 1.2rem;
+  }
+</style>

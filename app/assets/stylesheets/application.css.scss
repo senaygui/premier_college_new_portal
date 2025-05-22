@@ -203,3 +203,19 @@ p.declaration {
         gap: 25px;
         border: 3px red solid;   
 }
+
+// Custom select style for modern, large dropdowns
+.form-select {
+  font-size: 1.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #b6cef7;
+  box-shadow: none;
+  transition: border-color 0.2s;
+}
+
+.form-select:focus {
+  border-color: #5b9df9;
+  outline: none;
+  box-shadow: 0 0 0 0.1rem #b6cef7;
+}
