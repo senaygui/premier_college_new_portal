@@ -34,13 +34,16 @@
 </style>
 <div class="row">
     <div class="col-12 col-md-6 form-group">
-      <%= f.input :first_name, input_html: { class: 'cap form-control', autofocus: true, autocomplete: "first_name", id: 'first_name' },placeholder: "First Name", required: true, error: 'Username is mandatory, please specify one' %>
+      <%= f.label :first_name, 'First name' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= f.input_field :first_name, class: 'cap form-control', autofocus: true, autocomplete: "first_name", id: 'first_name', placeholder: "First Name", required: true %>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= f.input :middle_name, input_html: { class: 'cap form-control', autocomplete: "middle_name", id: "middle_name" },placeholder: "Middle Name", label: "Middle Name (Father name)", required: true %>
+      <%= f.label :middle_name, 'Middle Name (Father name)' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= f.input_field :middle_name, class: 'cap form-control', autocomplete: "middle_name", id: 'middle_name', placeholder: "Middle Name", required: true %>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= f.input :last_name, input_html: { class: 'cap form-control', autocomplete: "Last Name", id: 'last_name' },placeholder: "Last Name", label: "Last name (Grandfather name)", required: true %>
+      <%= f.label :last_name, 'Last name (Grandfather name)' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= f.input_field :last_name, class: 'cap form-control', autocomplete: "last_name", id: 'last_name', placeholder: "Last Name", required: true %>
     </div>
     
     <div class="col-12 col-md-6 form-group">
@@ -55,7 +58,8 @@
       <%= f.input :nationality, as: :country, selected: 'ET', priority_countries: ["ET", "US"], input_html: {class: "form-control custom-select"},include_blank: "select nationality"%>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= f.input :place_of_birth, input_html: { class: 'form-control', autocomplete: "place_of_birth" },placeholder: "Place of birth", label: "Place of birth", required: true %>
+      <%= f.label :place_of_birth, 'Place of birth' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= f.input_field :place_of_birth, class: 'form-control', autocomplete: "place_of_birth", placeholder: "Place of birth", required: true %>
     </div>
     <div class="col-12 col-md-6 form-group">
       <%= f.input :marital_status, as: :select, :collection => ["Single", "Married", "Widowed","Separated","Divorced"], input_html: {class: "form-control custom-select rounded-0"}, :include_blank => false %>
@@ -66,18 +70,153 @@
       </div>
     <%end%>
     <div class="col-12 col-md-6 form-group">
-      <%= f.input :email, input_html: { class: 'form-control', autocomplete: "email" },placeholder: "Email", required: true %>
+      <%= f.label :email, 'Email' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= f.input_field :email, class: 'form-control', autocomplete: "email", placeholder: "Email", required: true, id: 'student-email' %>
+      <div id="email-check-message" style="font-size: 90%; margin-top: 0.25rem;"></div>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= f.input :password, input_html: { class: 'form-control', autocomplete: "password" },placeholder: "Password", required: true %>
-      <%= f.hint "must be between 5 to 20 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"%>
+      <%= f.label :password, 'Password' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= f.input_field :password, class: 'form-control', autocomplete: "password", id: 'password', placeholder: "Password", required: true %>
+      <%= f.hint "must be between 5 to 20 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character" %>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= f.input :password_confirmation, input_html: { class: 'form-control', autocomplete: "password_confirmation" },placeholder: "Password confirmation", required: true %>
+      <%= f.label :password_confirmation, 'Password confirmation' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= f.input_field :password_confirmation, class: 'form-control', autocomplete: "password_confirmation", id: 'password_confirmation', placeholder: "Password confirmation", required: true %>
+      <div id="password-match-error" class="invalid-feedback" style="display: none;">
+        Passwords do not match!
+      </div>
     </div>
     <div class="col-12 col-md-6 form-group">
       <%= f.label :photo , "Upload Photo *" %>
-      <%= f.file_field :photo,class: 'form-control'%>
+      <%= f.file_field :photo, class: 'form-control', id: 'photo-upload', accept: 'image/*' %>
+      <div id="image-preview" class="mt-2" style="display: none;">
+        <img id="preview-img" src="#" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 4px; border: 1px solid #ddd;">
+      </div>
     </div>
   </div>
+
+  <script>
+    document.getElementById('photo-upload').addEventListener('change', function(event) {
+      const preview = document.getElementById('image-preview');
+      const previewImg = document.getElementById('preview-img');
+      const file = event.target.files[0];
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImg.src = e.target.result;
+          preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+      } else {
+        preview.style.display = 'none';
+      }
+    });
+
+    const form = document.querySelector('form');
+    const password = document.getElementById('password');
+    const passwordConfirmation = document.getElementById('password_confirmation');
+    const passwordMatchError = document.getElementById('password-match-error');
+
+    function validatePasswords() {
+      if (password.value !== passwordConfirmation.value) {
+        passwordMatchError.style.display = 'block';
+        passwordConfirmation.classList.add('is-invalid');
+        return false;
+      } else {
+        passwordMatchError.style.display = 'none';
+        passwordConfirmation.classList.remove('is-invalid');
+        return true;
+      }
+    }
+
+    passwordConfirmation.addEventListener('input', validatePasswords);
+    password.addEventListener('input', validatePasswords);
+
+    form.addEventListener('submit', function(event) {
+      if (!validatePasswords()) {
+        event.preventDefault();
+        passwordConfirmation.focus();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      function toggleAsterisk(input) {
+        var label = input.closest('.form-group').querySelector('.required-asterisk');
+        if (!label) return;
+        if (input.required && (input.value === '' || input.classList.contains('error'))) {
+          label.style.display = 'inline';
+        } else {
+          label.style.display = 'none';
+        }
+      }
+
+      // For all required fields
+      document.querySelectorAll('.form-group input[required], .form-group select[required], .form-group textarea[required]').forEach(function(input) {
+        input.addEventListener('input', function() {
+          toggleAsterisk(input);
+        });
+        input.addEventListener('blur', function() {
+          toggleAsterisk(input);
+        });
+        // Initial state
+        toggleAsterisk(input);
+      });
+
+      // On form submit, show asterisks for all invalid required fields
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          form.querySelectorAll('.form-group input[required], .form-group select[required], .form-group textarea[required]').forEach(function(input) {
+            toggleAsterisk(input);
+          });
+        });
+      }
+
+      // Email uniqueness check on blur
+      var emailInput = document.getElementById('student-email');
+      var emailMsg = document.getElementById('email-check-message');
+      var emailTaken = false;
+
+      if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+          var email = emailInput.value.trim();
+          emailMsg.textContent = '';
+          emailTaken = false;
+          if (email.length > 3 && email.includes('@')) {
+            fetch('/check_email?email=' + encodeURIComponent(email))
+              .then(function(response) { return response.json(); })
+              .then(function(data) {
+                if (data.taken) {
+                  emailMsg.textContent = 'This email is already registered.';
+                  emailMsg.style.color = '#e53935';
+                  emailTaken = true;
+                } else {
+                  emailMsg.textContent = 'Email is available!';
+                  emailMsg.style.color = '#077b3f';
+                  emailTaken = false;
+                }
+              })
+              .catch(function() {
+                emailMsg.textContent = 'Could not check email.';
+                emailMsg.style.color = '#e53935';
+                emailTaken = true;
+              });
+          }
+        });
+      }
+
+      // Prevent Next if email is taken
+      var nextBtn = document.querySelector('button.next');
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+          if (emailTaken) {
+            e.preventDefault();
+            emailInput.focus();
+            emailMsg.textContent = 'This email is already registered.';
+            emailMsg.style.color = '#e53935';
+          }
+        });
+      }
+    });
+  </script>
 

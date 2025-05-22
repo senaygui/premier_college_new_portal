@@ -10,18 +10,37 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+    <style>
+      .custom-flash {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2000;
+        min-width: 300px;
+        max-width: 90vw;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        opacity: 0.98;
+      }
+    </style>
   </head>
 
   
 
   <% if flash[:notice] %>
-    <div class="alert alert-success">
+    <div class="alert alert-success alert-dismissible fade show custom-flash" role="alert">
       <%= flash[:notice] %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="this.parentElement.style.display='none';">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
   <% end %>
   <% if flash[:alert] %>
-    <div class="alert alert-danger">
+    <div class="alert alert-danger alert-dismissible fade show custom-flash" role="alert">
       <%= flash[:alert] %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" onclick="this.parentElement.style.display='none';">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
   <% end %>
 
@@ -36,20 +55,6 @@
     <%if !(params[:update_pwd] == "update_pwd")%>
     <body class="hold-transition sidebar-mini layout-fixed <%= yield(:side)%>">
     <div class="wrapper">
-    <!-- Flash messages outside the sidebar -->
-    <div class="flash-messages">
-      <% if flash[:notice] %>
-        <div class="alert alert-success">
-          <%= flash[:notice] %>
-        </div>
-      <% end %>
-
-      <% if flash[:alert] %>
-        <div class="alert alert-danger">
-          <%= flash[:alert] %>
-        </div>
-      <% end %>
-    </div>
 
     <%= render 'layouts/navbar' %>
     <%= render 'layouts/sidebar' %>
@@ -76,4 +81,12 @@
 <!--   <script>
     $.widget.bridge('uibutton', $.ui.button)
   </script> -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        var flash = document.querySelector('.custom-flash');
+        if (flash) { flash.style.display = 'none'; }
+      }, 5000); // 5 seconds
+    });
+  </script>
 </html>

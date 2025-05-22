@@ -1,4 +1,5 @@
-<%provide(:title, "Dashboard")%>
+<%provide(:title, "Profile")%>
+
 <section class="content-header">
   <div class="container-fluid">
     <div class="row mb-2">
@@ -13,12 +14,14 @@
       </div>
     </div>
   </div>
-  <!-- /.container-fluid -->
 </section>
+
+
 <section class="content">
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 col-md-8">
+
         <!-- Profile Image -->
         <div class="card card-primary">
           <div class="card-header">
@@ -26,86 +29,123 @@
           </div>
           <div class="card-body box-profile">
             <div class="text-center">
-              <%if current_student.photo.attached? %>
-                <%= image_tag(current_student.photo, size: '150x150', class: "profile-user-img img-fluid") if current_student.photo.attached?%>
-              <%else %>
-                <%= image_tag("blank-profile-picture-973460_640.png", size: '150x150', class: "profile-user-img img-fluid") if !current_student.photo.attached? %>
+              <% if current_student.photo.attached? %>
+                <%= image_tag(current_student.photo, size: '150x150', class: "profile-user-img img-fluid") %>
+              <% else %>
+                <%= image_tag("blank-profile-picture-973460_640.png", size: '150x150', class: "profile-user-img img-fluid img-circle") %>
+              <% end %>
+            </div>
+
+            <h3 class="profile-username text-center"><b><%= "#{current_student.first_name.upcase} #{current_student.middle_name.upcase} #{current_student.last_name.upcase}" %></b></h3>
+
+            <div class="text-center my-3">
+              <% if current_student.document_verification_status == "pending" %>
+                <%= link_to "Edit Profile", edit_student_registration_path, class: "btn btn-outline-primary btn-flat" %>
+              <% end %>
+            </div>
+            <ul class="list-group list-group-unbordered mb-3">
+              <li class="list-group-item">
+                <b>Student Fullname</b> <a class="text-muted float-right"><%= "#{current_student.first_name.upcase} #{current_student.middle_name.upcase} #{current_student.last_name.upcase}" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Student ID</b> <a class="text-muted float-right"><%= current_student.student_id.present? ? current_student.student_id : "Not Assigned Yet" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Program</b> <a class="text-muted float-right"><%= current_student.program&.program_name || "N/A" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Department</b> <a class="text-muted float-right"><%= current_student.program&.department&.department_name || "N/A" %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Admission Type</b> <a class="text-muted float-right"><%= current_student.admission_type %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Academic Calendar</b>
+                <% if current_student.academic_calendar.present? %>
+                  <a href="<%= academic_calendar_path(current_student.academic_calendar.id) %>" class="clickable-link float-right">
+                    <%= current_student.academic_calendar.calender_year %>
+                  </a>
+                <% else %>
+                  <span class="float-right">N/A</span>
+                <% end %>
+              </li>
+              <li class="list-group-item">
+                <b>Study Level</b> <a class="text-muted float-right"><%= current_student.study_level %></a>
+              </li>
+              <li class="list-group-item">
+                <b>Year</b> <a class="text-muted float-right"><%= current_student.year %></a>
+              </li>
+              <% if current_student.section&.section_full_name %>
+                <li class="list-group-item">
+                  <b>Section</b> <a class="text-muted float-right"><%= current_student.section.section_full_name %></a>
+                </li>
+              <% end %>
+              <li class="list-group-item">
+                <b>Documents</b><%= link_to "click here to see the attachments", documents_path, class: "text-blue float-right" %>
+              </li>
+              <li class="list-group-item">
+                <b>Account Verification</b> <a class="float-right badge badge-info p-2 text-white"><%= current_student.account_verification_status %></a>
+              </li>
+            </ul>
+
+            <% if current_student.transfers.any? { |t| t.registrar_approval == 'approved' && !t.course_exemption_processed } %>
+              <div class="alert alert-info mt-4" role="alert">
+                You have a transfer request approved by the registrar. Would you like to <%= link_to 'process course exemptions', process_course_exemption_transfer_path(current_student.transfers.find { |t| t.registrar_approval == 'approved' && !t.course_exemption_processed }), method: :patch %>?
               </div>
-            <%end%>
-            <% if current_student.allow_editing?%>
-              <div class="mx-auto mt-5 d-flex flex-column" style="width: 180px;">
-                <%= simple_form_for(current_student, url: update_profile_photo_path, wrapper: :input_group, method: :put,multiple: true) do |f| %>
-                  <div class="flex1">
-                    <%= f.input :photo, as: :file, label: "Edit profile",class: 'form-control form-control-sm', input_html: {onchange: "this.form.submit()"}%>
-                  </div>
-                <%end%>
-              </div>
-            <%end%>
+            <% end %>
           </div>
-          <h1 class="profile-username text-center"><b><%= current_student.name.full.upcase%></b></h1>
-          <% unless current_student.allow_editing?%>
-            <%= link_to "Edit Profile", edit_student_registration_path, class: "btn btn-outline-primary btn-flat"%>
-          <%end%>
-          <ul class="list-group list-group-unbordered mb-3">
-            <li class="list-group-item mx-3">
-              <b>Student Fullname</b> <a class="text-muted float-right"><%= current_student.name.full.upcase%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Student ID</b> <a class="text-muted float-right"><%= current_student.student_id.present? ? current_student.student_id : "Not Assigned Yet"%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Prorgam</b> <a class="text-muted float-right"><%= current_student.program.program_name%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Department</b> <a class="text-muted float-right"><%= current_student.department.department_name%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Admission Type</b> <a class="text-muted float-right"><%= current_student.admission_type%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Study Level</b> <a class="text-muted float-right"><%= current_student.study_level%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Year</b> <a class="text-muted float-right"><%= current_student.year%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Documents</b><%= link_to "click here to see the attachments", documents_path, class: "text-blue float-right"%>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Account Verification</b> <a class="float-right badge badge-info p-2 text-white"><%= current_student.account_verification_status%></a>
-            </li>
-          </ul>
         </div>
-        <!-- /.card-body -->
       </div>
-      
-    <div class="col-12 col-md-4">
-      <div class="card card-primary">
-        <div class="card-header">
-          <h3 class="card-title">Basic Information</h3>
+      <div class="col-12 col-md-4">
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Basic Information</h3>
+          </div>
+          <div class="card-body box-profile">
+            <ul class="list-group list-group-unbordered mb-3">
+              <li class="list-group-item mx-3"><b>Email</b> <a class="text-muted float-right"><%= current_student.email%></a></li>
+              <li class="list-group-item mx-3"><b>Gender</b> <a class="text-muted float-right"><%= current_student.gender%></a></li>
+              <li class="list-group-item mx-3"><b>Birth Date</b> <a class="text-muted float-right"><%= current_student.date_of_birth.strftime("%b %d, %Y")%></a></li>
+              <li class="list-group-item mx-3"><b>Marital Status</b> <a class="text-muted float-right"><%= current_student.marital_status%></a></li>
+              <li class="list-group-item mx-3"><b>Phone</b> <a class="text-muted float-right"><%= current_student.student_address&.moblie_number || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Address</b> <a class="text-muted float-right"><%= [current_student.student_address&.country, current_student.student_address&.city, current_student.student_address&.region, current_student.student_address&.zone, current_student.student_address&.sub_city, current_student.student_address&.house_number].compact.join(', ').presence || 'N/A' %></a></li>
+            </ul>
+          </div>
         </div>
-        <div class="card-body box-profile">
-          <ul class="list-group list-group-unbordered mb-3">
-            <li class="list-group-item mx-3">
-              <b>Email</b> <a class="text-muted float-right"><%= current_student.email%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Gender</b> <a class="text-muted float-right"><%= current_student.gender%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Birth Date</b> <a class="text-muted float-right"><%= current_student.date_of_birth.strftime("%b %d, %Y")%></a>
-            </li>
-            <li class="list-group-item mx-3">
-              <b>Marital Status</b> <a class="text-muted float-right"><%= current_student.marital_status%></a>
-            </li>
-          </ul>
+        <div class="card card-primary mt-3">
+          <div class="card-header">
+            <h3 class="card-title">Emergency Contact</h3>
+          </div>
+          <div class="card-body box-profile">
+            <ul class="list-group list-group-unbordered mb-3">
+              <li class="list-group-item mx-3"><b>Name</b> <a class="text-muted float-right"><%= current_student.emergency_contact&.full_name || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Relationship</b> <a class="text-muted float-right"><%= current_student.emergency_contact&.relationship || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Phone</b> <a class="text-muted float-right"><%= current_student.emergency_contact&.cell_phone || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Email</b> <a class="text-muted float-right"><%= current_student.emergency_contact&.email || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Current Occupation</b> <a class="text-muted float-right"><%= current_student.emergency_contact&.current_occupation || 'N/A' %></a></li>
+            </ul>
+          </div>
         </div>
-        <!-- /.card-body -->
+        <div class="card card-primary mt-3">
+          <div class="card-header">
+            <h3 class="card-title">School/University Info</h3>
+          </div>
+          <div class="card-body box-profile">
+            <ul class="list-group list-group-unbordered mb-3">
+              <li class="list-group-item mx-3"><b>Last Attended High School</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.last_attended_high_school || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>School Address</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.school_address || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Grade 10 Result</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.grade_10_result || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Grade 10 Year</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.grade_10_exam_taken_year || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Grade 12 Result</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.grade_12_exam_result || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Grade 12 Year</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.grade_12_exam_taken_year || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>College/University</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.college_or_university || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>Field of Specialization</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.field_of_specialization || 'N/A' %></a></li>
+              <li class="list-group-item mx-3"><b>CGPA</b> <a class="text-muted float-right"><%= current_student.school_or_university_information&.cgpa || 'N/A' %></a></li>
+            </ul>
+          </div>
+        </div>
       </div>
-     
     </div>
+
   </div>
-  <!-- /.row -->
-</div>
-<!-- /.container-fluid -->
 </section>

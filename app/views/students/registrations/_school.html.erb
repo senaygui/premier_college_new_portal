@@ -1,13 +1,27 @@
 <%= f.simple_fields_for :school_or_university_information, SchoolOrUniversityInformation.new do |a|%>
   <div class="row">
     <div class="col-12 col-md-6 form-group">
-      <%= a.input :last_attended_high_school, input_html: { class: 'form-control', autofocus: true, autocomplete: "last_attended_high_school" },placeholder: "Last Attended High School", required: true%>
+      <%= a.label :last_attended_high_school, 'Last Attended High School' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= a.input_field :last_attended_high_school, class: 'form-control', autofocus: true, autocomplete: "last_attended_high_school", placeholder: "Last Attended High School", required: true %>
     </div>
     <div class="col-12 col-md-6 form-group">
       <%= a.input :school_address, input_html: { class: 'form-control', autocomplete: "school_address" },placeholder: "School Address"%>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= a.input :grade_10_result,as: :decimal, input_html: { class: 'form-control', autocomplete: "grade_10_result" },placeholder: "Grade 10 Matric Result", label: "Grade 10 Matric Result"%>
+      <%= a.input :grade_10_result, as: :decimal, 
+          input_html: { 
+            class: 'form-control grade-10-input', 
+            autocomplete: "grade_10_result",
+            min: "0",
+            max: "4",
+            step: "0.01"
+          },
+          placeholder: "Grade 10 Matric Result (0-4)", 
+          label: "Grade 10 Matric Result",
+          hint: "Enter a value between 0 and 4"%>
+      <div class="invalid-feedback grade-10-error" style="display: none;">
+        Please enter a value between 0 and 4
+      </div>
     </div>
     <div class="col-12 col-md-6 form-group">
       <%= a.label :grade_10_exam_taken_year%>
@@ -15,7 +29,20 @@
       <%= a.hint "select year in Gregorian calendar"%>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= a.input :grade_12_exam_result, as: :decimal, input_html: { class: 'form-control', autocomplete: "grade_12_exam_result" },placeholder: "Grade 12 Matric Result", label: "Grade 12 Matric Result"%>
+      <%= a.input :grade_12_exam_result, as: :decimal, 
+          input_html: { 
+            class: 'form-control grade-12-input', 
+            autocomplete: "grade_12_exam_result",
+            min: "0",
+            max: "700",
+            step: "1"
+          },
+          placeholder: "Grade 12 Matric Result (0-700)", 
+          label: "Grade 12 Matric Result",
+          hint: "Enter a value between 0 and 700"%>
+      <div class="invalid-feedback grade-12-error" style="display: none;">
+        Please enter a value between 0 and 700
+      </div>
     </div>
     <div class="col-12 col-md-6 form-group">
       <%= a.label :grade_12_exam_taken_year%>
@@ -23,6 +50,89 @@
       <%= a.hint "select year in Gregorian calendar"%>
     </div>
   </div>
+
+  <style>
+    .invalid-feedback {
+      color: #dc3545;
+      font-size: 80%;
+      margin-top: 0.25rem;
+    }
+    .grade-input-error {
+      border-color: #dc3545 !important;
+    }
+    .grade-input-valid {
+      border-color: #28a745 !important;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const grade10Input = document.querySelector('.grade-10-input');
+      const grade12Input = document.querySelector('.grade-12-input');
+      const grade10Error = document.querySelector('.grade-10-error');
+      const grade12Error = document.querySelector('.grade-12-error');
+
+      function validateGrade10(value) {
+        const num = parseFloat(value);
+        if (isNaN(num) || num < 0 || num > 4) {
+          grade10Input.classList.add('grade-input-error');
+          grade10Input.classList.remove('grade-input-valid');
+          grade10Error.style.display = 'block';
+          return false;
+        } else {
+          grade10Input.classList.remove('grade-input-error');
+          grade10Input.classList.add('grade-input-valid');
+          grade10Error.style.display = 'none';
+          return true;
+        }
+      }
+
+      function validateGrade12(value) {
+        const num = parseFloat(value);
+        if (isNaN(num) || num < 0 || num > 700) {
+          grade12Input.classList.add('grade-input-error');
+          grade12Input.classList.remove('grade-input-valid');
+          grade12Error.style.display = 'block';
+          return false;
+        } else {
+          grade12Input.classList.remove('grade-input-error');
+          grade12Input.classList.add('grade-input-valid');
+          grade12Error.style.display = 'none';
+          return true;
+        }
+      }
+
+      grade10Input.addEventListener('input', function() {
+        validateGrade10(this.value);
+      });
+
+      grade10Input.addEventListener('blur', function() {
+        validateGrade10(this.value);
+      });
+
+      grade12Input.addEventListener('input', function() {
+        validateGrade12(this.value);
+      });
+
+      grade12Input.addEventListener('blur', function() {
+        validateGrade12(this.value);
+      });
+
+      // Form validation
+      const form = document.querySelector('form');
+      form.addEventListener('submit', function(e) {
+        const grade10Valid = validateGrade10(grade10Input.value);
+        const grade12Valid = validateGrade12(grade12Input.value);
+        
+        if (!grade10Valid || !grade12Valid) {
+          e.preventDefault();
+          if (!grade10Valid) grade10Input.focus();
+          else if (!grade12Valid) grade12Input.focus();
+        }
+      });
+    });
+  </script>
+
   <%if params[:study_level] == "graduate"%>
     <div class="card card-outline card-primary">
       <div class="card-header">

@@ -472,60 +472,65 @@
           rules: {
             'student[photo]': {
                   required: true,
-                },
-          'student[date_of_birth]': {
-            required:true,
-          },
-          password:{
-            required:true,
-            minlength:8,
-          }
+            },
+            'student[program_id]': {
+                  required: true,
+            },
+            'student[date_of_birth]': {
+              required:true,
+            },
+            password:{
+              required:true,
+              minlength:8,
+            }
           },
           // Specify validation error messages
           messages: {
-          'student[first_name]': "First name is required",
-          'student[last_name]': "Last name is required",
-          'student[middle_name]': "Middle name is required",
-          'student[email]': {
-            required:   "Email is required",
-            email:    "Please enter a valid e-mail",
-          },
-          phone:{
-            required:   "Phone number is requied",
-            minlength:  "Please enter 10 digit mobile number",
-            maxlength:  "Please enter 10 digit mobile number",
-            digits:   "Only numbers are allowed in this field"
-          },
-          date:{
-            required:   "Date is required",
-            minlength:  "Date should be a 2 digit number, e.i., 01 or 20",
-            maxlength:  "Date should be a 2 digit number, e.i., 01 or 20",
-            digits:   "Date should be a number"
-          },
-          month:{
-            required:   "Month is required",
-            minlength:  "Month should be a 2 digit number, e.i., 01 or 12",
-            maxlength:  "Month should be a 2 digit number, e.i., 01 or 12",
-            digits:   "Only numbers are allowed in this field"
-          },
-          year:{
-            required:   "Year is required",
-            minlength:  "Year should be a 4 digit number, e.i., 2018 or 1990",
-            maxlength:  "Year should be a 4 digit number, e.i., 2018 or 1990",
-            digits:   "Only numbers are allowed in this field"
-          },
-          username:{
-            required:   "Username is required",
-            minlength:  "Username should be minimum 4 characters",
-            maxlength:  "Username should be maximum 16 characters",
-          },
-          password:{
-            required:   "Password is required",
-            minlength:  "Password should be minimum 8 characters",
-            // maxlength:  "Password should be maximum 16 characters",
-          }
+            'student[program_id]': "Please select a program to continue",
+            'student[first_name]': "First name is required",
+            'student[last_name]': "Last name is required",
+            'student[middle_name]': "Middle name is required",
+            'student[email]': {
+              required:   "Email is required",
+              email:    "Please enter a valid e-mail",
+            },
+            phone:{
+              required:   "Phone number is requied",
+              minlength:  "Please enter 10 digit mobile number",
+              maxlength:  "Please enter 10 digit mobile number",
+              digits:   "Only numbers are allowed in this field"
+            },
+            date:{
+              required:   "Date is required",
+              minlength:  "Date should be a 2 digit number, e.i., 01 or 20",
+              maxlength:  "Date should be a 2 digit number, e.i., 01 or 20",
+              digits:   "Date should be a number"
+            },
+            month:{
+              required:   "Month is required",
+              minlength:  "Month should be a 2 digit number, e.i., 01 or 12",
+              maxlength:  "Month should be a 2 digit number, e.i., 01 or 12",
+              digits:   "Only numbers are allowed in this field"
+            },
+            year:{
+              required:   "Year is required",
+              minlength:  "Year should be a 4 digit number, e.i., 2018 or 1990",
+              maxlength:  "Year should be a 4 digit number, e.i., 2018 or 1990",
+              digits:   "Only numbers are allowed in this field"
+            },
+            username:{
+              required:   "Username is required",
+              minlength:  "Username should be minimum 4 characters",
+              maxlength:  "Username should be maximum 16 characters",
+            },
+            password:{
+              required:   "Password is required",
+              minlength:  "Password should be minimum 8 characters",
+              // maxlength:  "Password should be maximum 16 characters",
+            }
           }
       }
+
       $("#new_student").multiStepForm(
       {
         // defaultStep:0,
@@ -537,5 +542,12 @@
         validations:val,
       }
       ).navigateTo(0);
+
+      // Remove the custom next button handler and use the built-in validation
+      $('.program-radio').on('change', function() {
+        if ($(this).is(':checked')) {
+          $('#program-error').hide();
+        }
+      });
     });
 </script>

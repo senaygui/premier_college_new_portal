@@ -2,7 +2,7 @@
 <% if current_student.year!=1 || current_student.semester!=1 %>
   <%if @payment_remaining.present? && @payment_remaining.is_back_invoice_created?%>
     <div class="col-12">
-      <div class="card card-primary">
+      <div class="card card-primary instruction-card">
         <div class="card-header">
           <h3 class="card-title">
             <i class="fas fa-info-circle mr-2"></i>
@@ -26,7 +26,7 @@
     </div>
   <%elsif @payment_remaining.present? && !@payment_remaining.is_back_invoice_created?%>
     <div class="col-12">
-      <div class="card card-warning">
+      <div class="card card-warning instruction-card">
         <div class="card-header">
           <h3 class="card-title">
             <i class="fas fa-info-circle mr-2"></i>
@@ -54,7 +54,7 @@
   <%else%>
     <% if @smr.nil?%>
       <div class="col-12">
-        <div class="card card-success">
+        <div class="card card-success instruction-card">
           <div class="card-header">
             <h3 class="card-title">
               <i class="fas fa-info-circle mr-2"></i>
@@ -88,7 +88,7 @@
       </div>
     <%elsif !@invoice.nil? && @invoice.invoice_status.strip == "unpaid"%>
       <div class="col-12">
-        <div class="card card-warning">
+        <div class="card card-warning instruction-card">
           <%= render "card_header"%>
           <div class="card-body">
             <p class="text-center text-danger">
@@ -102,7 +102,7 @@
       </div>
     <%elsif !@invoice.nil? && @invoice.invoice_status.strip == "pending"%>
       <div class="col-12">
-        <div class="card card-warning">
+        <div class="card card-warning instruction-card">
           <%= render "card_header"%>
           <div class="card-body">
             <p class="text-center text-danger">
@@ -113,7 +113,7 @@
       </div>
     <%elsif !@invoice.nil? && @invoice.invoice_status.strip == "denied"%>
       <div class="col-12">
-        <div class="card card-danger">
+        <div class="card card-danger instruction-card">
           <%= render "card_header"%>
           <div class="card-body">
             <p class="text-center text-danger">
@@ -126,7 +126,7 @@
       <%=render "pending", registrar: @smr.registrar_approval_status == "pending", finance: @smr.finance_approval_status == "pending" %>
     <%elsif @smr.registrar_approval_status=="approved" && @smr.finance_approval_status=="approved"%>
       <div class="col-12">
-        <div class="card card-success">
+        <div class="card card-success instruction-card">
           <%= render "card_header"%>
           <!-- /.card-header -->
           <div class="card-body">
@@ -141,7 +141,7 @@
       </div>
     <%elsif @smr.registrar_approval_status=="denied" || @smr.finance_approval_status=="denied"%>
       <div class="col-12">
-        <div class="card card-success">
+        <div class="card card-success instruction-card">
           <%= render "card_header"%>
           <div class="card-body">
             <p class="text-center text-danger">
@@ -162,7 +162,7 @@
   <%if !current_student.invoices.last.present?%>
     <% if current_student.document_verification_status == "pending"%>
       <div class="col-12">
-        <div class="card card-primary">
+        <div class="card card-primary instruction-card">
           <div class="card-header">
             <h3 class="card-title">
               <i class="fas fa-info-circle mr-2"></i>
@@ -188,7 +188,7 @@
       </div>
     <%elsif current_student.document_verification_status == "approved"%>
       <div class="col-12">
-        <div class="card card-success">
+        <div class="card card-success instruction-card">
           <div class="card-header">
             <h3 class="card-title">
               <i class="fas fa-info-circle mr-2"></i>
@@ -217,7 +217,7 @@
       </div>
     <%elsif current_student.document_verification_status == "denied"%>
       <div class="col-12">
-        <div class="card card-outline card-danger">
+        <div class="card card-outline card-danger instruction-card">
           <div class="card-header">
             <h3 class="card-title">
               <i class="fas fa-info-circle mr-2"></i>
@@ -243,7 +243,7 @@
       </div>
     <%elsif current_student.document_verification_status == "incomplete"%>
       <div class="col-12">
-        <div class="card card-outline card-warning">
+        <div class="card card-outline card-warning instruction-card">
           <div class="card-header">
             <h3 class="card-title">
               <i class="fas fa-info-circle mr-2"></i>
@@ -272,7 +272,7 @@
     <% if current_student.invoices.last.payment_transaction.present?%>
       <% if current_student.invoices.last.payment_transaction.finance_approval_status == "pending"%>
         <div class="col-12">
-          <div class="card card-primary">
+          <div class="card card-primary instruction-card">
             <div class="card-header">
               <h3 class="card-title">
                 <i class="fas fa-info-circle mr-2"></i>
@@ -298,7 +298,7 @@
         </div>
       <%elsif current_student.invoices.last.payment_transaction.finance_approval_status == "approved"%>
         <div class="col-12">
-          <div class="card card-success">
+          <div class="card card-success instruction-card">
             <%= render "card_header"%>
             <!-- /.card-header -->
             <div class="card-body">
@@ -314,7 +314,7 @@
         <%= render 'student_id'%>
       <%elsif current_student.invoices.last.payment_transaction.finance_approval_status == "denied"%>
         <div class="col-12">
-          <div class="card card-outline card-danger">
+          <div class="card card-outline card-danger instruction-card">
             <div class="card-header">
               <h3 class="card-title">
                 <i class="fas fa-info-circle mr-2"></i>

@@ -48,30 +48,52 @@
     padding: 2rem;
   }
 
-  .icon-box {
-    margin-bottom: 20px;
-    padding: 20px;
-    border-radius: 10px;
-    background: #252525;
-    transition: 0.3s;
-    text-align: center;
-    color: #ffffff;
+  .icon-box-link {
+    display: block;
+    text-decoration: none;
   }
 
-  .icon-box:hover {
-    background: #2b2b2b;
+  .icon-box {
+    margin-bottom: 20px;
+    padding: 30px 20px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #077b3f 0%, #036696 100%);
+    transition: box-shadow 0.3s, transform 0.3s, background 0.3s;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(3,102,150,0.08);
+    border: 2px solid transparent;
+    position: relative;
+    z-index: 1;
   }
 
   .icon-box h4 {
     font-weight: 700;
-    font-size: 18px;
-    color: #ffffff;
+    font-size: 20px;
+    color: #fff;
     margin-top: 10px;
     transition: color 0.3s;
   }
 
-  .icon-box:hover h4 {
-    color: #036696;
+  .icon-box:hover, .icon-box:focus {
+    background: linear-gradient(135deg, #036696 0%, #077b3f 100%);
+    box-shadow: 0 8px 24px rgba(3,123,63,0.18);
+    transform: translateY(-4px) scale(1.03);
+    border-color: #077b3f;
+    color: #fff;
+  }
+
+  .icon-box:active {
+    background: #036696;
+    border-color: #077b3f;
+    color: #fff;
+  }
+
+  .icon-box-link:focus .icon-box,
+  .icon-box-link:hover .icon-box {
+    outline: none;
+    box-shadow: 0 8px 24px rgba(3,123,63,0.18);
   }
 
   .icon-box p {
@@ -79,12 +101,70 @@
     line-height: 24px;
     font-size: 14px;
   }
+
+  .alumni-sidebar-list .list-group-item {
+    border: none;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+  .alumni-sidebar-list .list-group-item:last-child {
+    border-bottom: none;
+  }
+  .alumni-sidebar-list .list-group-item a {
+    text-decoration: none;
+    display: block;
+  }
+  .alumni-sidebar-list .list-group-item:hover {
+    background: #f8f9fa;
+  }
+  @media (max-width: 991.98px) {
+    .alumni-sidebar-list .list-group-item {
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .alumni-sidebar-list {
+      margin-bottom: 2rem;
+    }
+    .col-lg-3, .col-md-4 {
+      width: 100%;
+      max-width: 100%;
+      flex: 0 0 100%;
+    }
+    .col-lg-9, .col-md-8 {
+      width: 100%;
+      max-width: 100%;
+      flex: 0 0 100%;
+    }
+  }
+  .icon-box-regular-degree {
+    background: linear-gradient(135deg, #077b3f 0%, #36d1c4 100%);
+  }
+  .icon-box-regular-masters {
+    background: linear-gradient(135deg, #e53935 0%, #ff6f00 100%);
+    color: #fff;
+  }
+  .icon-box-regular-masters h4 {
+    color: #fff;
+  }
+  .icon-box-extension-degree {
+    background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+    color: #333;
+  }
+  .icon-box-extension-degree h4 {
+    color: #333;
+  }
 </style>
 
 <div class="content mt-3">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-12">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Main Admission Content -->
+      <div class="col-lg-9 col-md-8">
         <div class="card card-primary">
           <div class="card-header">
             <h3 class="card-title">
@@ -96,97 +176,74 @@
           <div class="card-body">
             <h2>In What Study Level And Modality Do You Want To Enroll?</h2>
             <div class="row justify-content-center">
-              <div class="col-lg-3 col-md-6">
-                <%= link_to new_external_transfer_path, 'data-no-turbolink' => false do %>
-                  <div class="icon-box">
-                    <h4>Apply for Transfer</h4>
-                  </div>
-                <% end %>
-              </div>
-              <div class="col-lg-3 col-md-6">
-                <%= link_to new_student_registration_path(modality: "regular", study_level: "undergraduate"), 'data-no-turbolink' => false do %>
-                  <div class="icon-box">
+              <div class="col-lg-4 col-md-6 mb-4">
+                <%= link_to new_student_registration_path(modality: "regular", study_level: "undergraduate"), 'data-no-turbolink' => false, class: 'icon-box-link' do %>
+                  <div class="icon-box icon-box-regular-degree">
                     <h4>Regular Degree</h4>
                   </div>
                 <% end %>
               </div>
-              <div class="col-lg-3 col-md-6">
-                <%= link_to new_student_registration_path(modality: "regular", study_level: "graduate"), 'data-no-turbolink' => false do %>
-                  <div class="icon-box">
-                    <h4>Regular Masters</h4>
-                  </div>
-                <% end %>
-              </div>
-              <div class="col-lg-3 col-md-6">
-                <%= link_to new_student_registration_path(modality: "extention", study_level: "undergraduate"), 'data-no-turbolink' => false do %>
-                  <div class="icon-box">
+              <div class="col-lg-4 col-md-6 mb-4">
+                <%= link_to new_student_registration_path(modality: "extention", study_level: "undergraduate"), 'data-no-turbolink' => false, class: 'icon-box-link' do %>
+                  <div class="icon-box icon-box-extension-degree">
                     <h4>Extension Degree</h4>
                   </div>
                 <% end %>
               </div>
-            
-              <div class="col-lg-3 col-md-6">
-  <div class="icon-box" style="padding: 20px; border-radius: 10px; background: #252525; text-align: center; color: #ffffff;">
-    <h4>
-      <a data-toggle="collapse" href="#alumniServicesCollapse" role="button" aria-expanded="false" aria-controls="alumniServicesCollapse" style="color: #ffffff; text-decoration: none;">
-        Alumni Services
-      </a>
-    </h4>
-    <div class="collapse" id="alumniServicesCollapse">
-      <div class="row">
-        <div class="col-12">
-        <%= link_to new_document_request_path(document_type: 'Official Transcript'), 'data-no-turbolink' => false do %>
-          <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
-            <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Official Transcript</h5>
-          </div>
-        <% end %>
-        </div>
-        <div class="col-12">
-          <%= link_to new_document_request_path(document_type: 'Original Degree'), 'data-no-turbolink' => false do %>
-            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
-              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Original Degree</h5>
-            </div>
-          <% end %>
-        </div>
-        <div class="col-12">
-          <%= link_to new_document_request_path(document_type: 'Temporary Certificate'), 'data-no-turbolink' => false do %>
-            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
-              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Temporary Certificate</h5>
-            </div>
-          <% end %>
-        </div>
-        <div class="col-12">
-          <%= link_to new_document_request_path(document_type: 'Student Copy'), 'data-no-turbolink' => false do %>
-            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
-              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Student Copy</h5>
-            </div>
-          <% end %>
-        </div>
-        <div class="col-12">
-          <%= link_to new_document_request_path(document_type: 'To Whom It May Concern'), 'data-no-turbolink' => false do %>
-            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
-              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">To Whom It May Concern</h5>
-            </div>
-          <% end %>
-        </div>
-        <div class="col-12">
-          <%= link_to track_form_document_requests_path(document_type: 'Track Request'), 'data-no-turbolink' => false do %>
-            <div class="icon-box" style="padding: 10px; border-radius: 10px; background: #2b2b2b; text-align: center; color: #ffffff;">
-              <h5 style="font-weight: 700; font-size: 16px; color: #ffffff;">Track Your Request</h5>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-            
+              <div class="col-lg-4 col-md-6 mb-4">
+                <%= link_to new_student_registration_path(modality: "regular", study_level: "graduate"), 'data-no-turbolink' => false, class: 'icon-box-link' do %>
+                  <div class="icon-box icon-box-regular-masters">
+                    <h4>Regular Masters</h4>
+                  </div>
+                <% end %>
+              </div>
+              
             </div>
           </div>
           <!-- /.card-body -->
         </div>
       </div>
+      <!-- Alumni Services Sidebar -->
+      <div class="col-lg-3 col-md-4 mb-4">
+        <div class="card" style="position:sticky;top:30px;">
+          <div class="card-header" style="background:#077b3f;color:#fff;">
+            <h4 class="mb-0">Alumni Services</h4>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush alumni-sidebar-list">
+              <li class="list-group-item">
+                <%= link_to 'Official Transcript', new_document_request_path(document_type: 'Official Transcript'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'Original Degree', new_document_request_path(document_type: 'Original Degree'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'Temporary Certificate', new_document_request_path(document_type: 'Temporary Certificate'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'Student Copy', new_document_request_path(document_type: 'Student Copy'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'To Whom It May Concern', new_document_request_path(document_type: 'To Whom It May Concern'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'Track Your Request', track_form_document_requests_path(document_type: 'Track Request'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="position:sticky;top:30px;">
+              <div class="card-header" style="background:#077b3f;color:#fff; border-radius:0;">
+                <h4 class="mb-0">Other Services</h4>
+              </div>
+              <ul class="list-group list-group-flush alumni-sidebar-list">
+                <li class="list-group-item">
+                  <%= link_to 'Apply for Transfer', new_external_transfer_path, style: 'color:#036696;font-weight:600;' %>
+                </li>
+              </ul>
+            </div>
+      </div>
+      
     </div>
   </div>
 </div>

@@ -1,7 +1,8 @@
 <%= f.fields_for :emergency_contact  do |a|%>
   <div class="row">
     <div class="col-12 col-md-6 form-group">
-      <%= a.input :full_name, input_html: { class: 'form-control', autocomplete: "full_name"  },placeholder: "Full name", required: true, label: "Contact Person Fullname" %>
+      <%= a.label :full_name, 'Contact Person Fullname' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= a.input_field :full_name, class: 'form-control', autocomplete: "full_name", placeholder: "Full name", required: true %>
     </div>
     <div class="col-12 col-md-6 form-group">
       <%= a.input :relationship, as: :select, :collection => ["Husband", "Wife", "Father", "Mother", "Legal guardian","Son","Daughter","Brother","Sister", "Friend","Uncle","Aunt","Cousin","Nephew","Niece","Grandparent"], input_html: {class: "form-control custom-select"}, required: true, label: "Contact Person Relationship" %>

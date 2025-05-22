@@ -67,7 +67,6 @@ class PagesController < ApplicationController
           year: @semester_registration.year,
           created_by: current_student.id
         )
-
         course.update(status: :taken) if course_registration.save
       end
 

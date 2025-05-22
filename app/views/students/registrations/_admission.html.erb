@@ -2,6 +2,100 @@
   <%= f.input :study_level, as: :hidden, :input_html => { :value => params[:study_level]}%>
 	<%= f.input :admission_type, as: :hidden, :input_html => { :value => params[:modality]}%>
   <div class="col-12 col-md-6">
-    <%= f.input :program_id, as: :radio_buttons, :collection => Program.where(study_level:  params[:study_level],admission_type: params[:modality]).pluck(:program_name, :id), label: "Select the program you want to enroll"%>
+    <div class="form-group">
+      <label class="program-label">Select the program you want to enroll<span class='required-asterisk' style='display:none;color:red;'>*</span></label>
+      <div class="program-selection" id="program-selection">
+        <% Program.where(study_level: params[:study_level], admission_type: params[:modality]).each do |program| %>
+          <div class="custom-radio">
+            <%= f.radio_button :program_id, program.id, required: true, class: 'program-radio' %>
+            <%= f.label "program_id_#{program.id}", program.program_name, class: 'program-label' %>
+          </div>
+        <% end %>
+      </div>
+      <div class="invalid-feedback" id="program-error" style="display: none;">
+        Please select a program to continue
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  .program-selection {
+    margin-top: 10px;
+  }
+  
+  .custom-radio {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-radio:hover {
+    background-color: #f8f9fa;
+    border-color: #036696;
+  }
+  
+  .program-radio {
+    display: none;
+  }
+  
+  .program-label {
+    display: block;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .program-radio:checked + .program-label {
+    color: #036696;
+    font-weight: bold;
+  }
+  
+  .custom-radio.selected {
+    background-color: #e8f4f8;
+    border-color: #036696;
+  }
+  
+  .required:after {
+    content: " *";
+    color: red;
+  }
+
+  .invalid-feedback {
+    display: none;
+    color: #dc3545;
+    font-size: 80%;
+    margin-top: 0.25rem;
+  }
+
+  .error {
+    color: #dc3545;
+    font-size: 80%;
+    margin-top: 0.25rem;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const programRadios = document.querySelectorAll('.program-radio');
+    const programError = document.getElementById('program-error');
+    
+    programRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        // Remove selected class from all custom-radio divs
+        document.querySelectorAll('.custom-radio').forEach(div => {
+          div.classList.remove('selected');
+        });
+        
+        // Add selected class to parent div of checked radio
+        if (this.checked) {
+          this.closest('.custom-radio').classList.add('selected');
+          programError.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

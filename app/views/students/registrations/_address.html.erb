@@ -3,15 +3,36 @@
 <style type="text/css">
   .iti {
     display: block;
-}
+  }
+  .hide {
+    display: none;
+  }
+  .error {
+    border: 1px solid #dc3545 !important;
+  }
+  .valid {
+    border: 1px solid #28a745 !important;
+  }
+  .error-message {
+    color: #dc3545;
+    font-size: 80%;
+    margin-top: 0.25rem;
+  }
+  .valid-message {
+    color: #28a745;
+    font-size: 80%;
+    margin-top: 0.25rem;
+  }
 </style>
+
 <%= f.fields_for :student_address do |a|%>
   <div class="row">
     <div class="col-12 col-md-6 form-group">
       <%= a.input :country, as: :country, selected: 'ET', priority_countries: ["ET", "US"], input_html: {class: "form-control custom-select"},include_blank: "select country"%>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= a.input :city, input_html: { class: 'form-control', autofocus: true, autocomplete: "city" },placeholder: "City", required: true, error: 'city is mandatory, please specify one' %>
+      <%= a.label :city, 'City' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= a.input_field :city, class: 'form-control', autofocus: true, autocomplete: "city", placeholder: "City", required: true %>
     </div>
     
     
@@ -35,93 +56,105 @@
       <%= a.input :house_number, input_html: { class: 'form-control', autocomplete: "house_number" },placeholder: "House Number" %>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= a.input :moblie_number, input_html: { class: 'form-control', autocomplete: "moblie_number" }, required: true %>
-      <span id="valid-msg" class="hide"></span>
-      <span id="error-msg" class="hide"></span>
+      <%= a.label :moblie_number, 'Mobile Number' %><span class='required-asterisk' style='display:none;color:red;'>*</span>
+      <%= a.input_field :moblie_number, class: 'form-control phone-input', autocomplete: "moblie_number", required: true %>
+      <span id="valid-msg" class="valid-message hide">✓ Valid number</span>
+      <span id="error-msg" class="error-message hide"></span>
     </div>
     <div class="col-12 col-md-6 form-group">
-      <%= a.input :telephone_number, input_html: { class: 'form-control', autocomplete: "telephone_number" }, label: "Alternative Phone Number"%>
-      <span id="valid-msg-alt" class="hide"></span>
-      <span id="error-msg-alt" class="hide"></span>
+      <%= a.input :telephone_number, input_html: { class: 'form-control phone-input-alt', autocomplete: "telephone_number" }, label: "Alternative Phone Number"%>
+      <span id="valid-msg-alt" class="valid-message hide">✓ Valid number</span>
+      <span id="error-msg-alt" class="error-message hide"></span>
     </div>
   </div>
 <%end%>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
-<script >
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mobile number validation
+    const mobileInput = document.querySelector("#student_student_address_attributes_moblie_number");
+    const mobileErrorMsg = document.querySelector("#error-msg");
+    const mobileValidMsg = document.querySelector("#valid-msg");
+    
+    const mobileIti = window.intlTelInput(mobileInput, {
+      preferredCountries: ["et"],
+      separateDialCode: true,
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+    });
 
-  var phoneNumber = document.querySelector("#student_student_address_attributes_moblie_number"),
-  errorMsg = document.querySelector("#error-msg"),
-  validMsg = document.querySelector("#valid-msg");
-  // here, the index maps to the error code returned from getValidationError - see readme
-  // var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
+    function resetMobileValidation() {
+      mobileInput.classList.remove("error", "valid");
+      mobileErrorMsg.classList.add("hide");
+      mobileValidMsg.classList.add("hide");
+    }
 
-  // initialise plugin
-  var iti = window.intlTelInput(phoneNumber, {
-    preferredCountries: ["et"],
-    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+    function validateMobileNumber() {
+      resetMobileValidation();
+      if (mobileInput.value.trim()) {
+        if (mobileIti.isValidNumber()) {
+          mobileInput.classList.add("valid");
+          mobileValidMsg.classList.remove("hide");
+          return true;
+        } else {
+          mobileInput.classList.add("error");
+          mobileErrorMsg.textContent = "Please enter a valid phone number";
+          mobileErrorMsg.classList.remove("hide");
+          return false;
+        }
+      }
+      return false;
+    }
+
+    mobileInput.addEventListener('blur', validateMobileNumber);
+    mobileInput.addEventListener('change', validateMobileNumber);
+    mobileInput.addEventListener('keyup', resetMobileValidation);
+
+    // Alternative phone number validation
+    const altInput = document.querySelector("#student_student_address_attributes_telephone_number");
+    const altErrorMsg = document.querySelector("#error-msg-alt");
+    const altValidMsg = document.querySelector("#valid-msg-alt");
+    
+    const altIti = window.intlTelInput(altInput, {
+      preferredCountries: ["et"],
+      separateDialCode: true,
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+    });
+
+    function resetAltValidation() {
+      altInput.classList.remove("error", "valid");
+      altErrorMsg.classList.add("hide");
+      altValidMsg.classList.add("hide");
+    }
+
+    function validateAltNumber() {
+      resetAltValidation();
+      if (altInput.value.trim()) {
+        if (altIti.isValidNumber()) {
+          altInput.classList.add("valid");
+          altValidMsg.classList.remove("hide");
+          return true;
+        } else {
+          altInput.classList.add("error");
+          altErrorMsg.textContent = "Please enter a valid phone number";
+          altErrorMsg.classList.remove("hide");
+          return false;
+        }
+      }
+      return true; // Optional field, so return true if empty
+    }
+
+    altInput.addEventListener('blur', validateAltNumber);
+    altInput.addEventListener('change', validateAltNumber);
+    altInput.addEventListener('keyup', resetAltValidation);
+
+    // Form validation
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
+      if (!validateMobileNumber()) {
+        e.preventDefault();
+        mobileInput.focus();
+      }
+    });
   });
-
-  // var reset = function() {
-  //   phoneNumber.classList.remove("error");
-  //   errorMsg.innerHTML = "";
-  //   errorMsg.classList.add("hide");
-  //   validMsg.classList.add("hide");
-  // };
-
-  // on blur: validate
-  // phoneNumber.addEventListener('blur', function() {
-  //   reset();
-  //   if (phoneNumber.value.trim()) {
-  //     if (iti.isValidNumber()) {
-  //       validMsg.classList.remove("hide");
-  //     } else {
-  //       phoneNumber.classList.add("error");
-  //       var errorCode = iti.getValidationError();
-  //       errorMsg.innerHTML = errorMap[errorCode];
-  //       errorMsg.classList.remove("hide");
-  //     }
-  //   }
-  // });
-
-  // on keyup / change flag: reset
-  // phoneNumber.addEventListener('change', reset);
-  // phoneNumber.addEventListener('keyup', reset);
-
-  var alternativePhonenumber = document.querySelector("#student_student_address_attributes_telephone_number"),
-  errorMsgAlt = document.querySelector("#error-msg-alt"),
-  errorMsgAlt = document.querySelector("#error-msg-alt");
-  // here, the index maps to the error code returned from getValidationError - see readme
-  // var errorMap = ["Invalid number", "Invalid country code", "Too short", "Too long", "Invalid number"];
-
-  // initialise plugin
-  var iti = window.intlTelInput(alternativePhonenumber, {
-    preferredCountries: ["et"],
-    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
-  });
-
-  // var reset = function() {
-  //   alternativePhonenumber.classList.remove("error");
-  //   errorMsgAlt.innerHTML = "";
-  //   errorMsgAlt.classList.add("hide");
-  //   validMsg.classList.add("hide");
-  // };
-
-  // // on blur: validate
-  // alternativePhonenumber.addEventListener('blur', function() {
-  //   reset();
-  //   if (alternativePhonenumber.value.trim()) {
-  //     if (iti.isValidNumber()) {
-  //       validMsg.classList.remove("hide");
-  //     } else {
-  //       alternativePhonenumber.classList.add("error");
-  //       var errorCode = iti.getValidationError();
-  //       errorMsgAlt.innerHTML = errorMap[errorCode];
-  //       errorMsgAlt.classList.remove("hide");
-  //     }
-  //   }
-  // });
-
-  // on keyup / change flag: reset
-  // alternativePhonenumber.addEventListener('change', reset);
-  // alternativePhonenumber.addEventListener('keyup', reset);
 </script>

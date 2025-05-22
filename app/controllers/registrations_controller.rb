@@ -13,12 +13,11 @@ class RegistrationsController < Devise::RegistrationsController
   #    end
   #  endp
   def new
-
     # Override Devise default behaviour and create a profile as well
     build_resource({})
     resource.build_emergency_contact
     resource.build_student_address
-    respond_with self.resource
+    respond_with resource
   end
 
   def update_profile_photo
@@ -56,10 +55,17 @@ class RegistrationsController < Devise::RegistrationsController
     redirect_to documents_url
   end
 
+  # AJAX endpoint for email uniqueness check
+  def check_email
+    email = params[:email].to_s.strip.downcase
+    taken = Student.exists?(email:)
+    render json: { taken: }
+  end
+
   protected
 
   def update_resource(resource, params)
-    resource.update_without_password(params.except("current_password"))
+    resource.update_without_password(params.except('current_password'))
   end
 
   private
