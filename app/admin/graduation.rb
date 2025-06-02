@@ -12,9 +12,6 @@ ActiveAdmin.register_page "Graduation" do
           div do
             link_to "Generate Student Temporary", student_temporary_path, target: "_blank"
           end
-          div do
-            link_to "Generate Student Copy", student_copy_path, target: "_blank"
-          end
         end
       end
     end
