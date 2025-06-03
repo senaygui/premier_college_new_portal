@@ -160,6 +160,8 @@ class SemesterRegistration < ApplicationRecord
                 student.update_columns(semester: 1)
                 student.update_columns(year: promoted_year)
               end
+            elsif report.academic_status.strip == 'Academic Dismissal' || (report.academic_status == 'Academic Suspension')
+              student.update_columns(account_status: 'inactive')
             end
           end
         end
