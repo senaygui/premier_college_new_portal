@@ -96,54 +96,56 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <% unless @student_grades.blank? && current_student.account_status != 'active' %>
-          <div class="card card-success">
-            <div class="card-header">
-              <h3 class="card-title">
-                <strong>Year <%= current_student.year %> Semester <%= current_student.semester %> Student Grades</strong>
-              </h3>
-              <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                  <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                  <i class="fas fa-times"></i>
-                </button>
+        <% unless @student_grades.blank? %>
+          <%if current_student.account_status != 'active'%>
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <strong>Year <%= current_student.year %> Semester <%= current_student.semester %> Student Grades</strong>
+                </h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>Course Title</th>
+                      <th>Grade Letter</th>
+                      <th>Total Mark</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% @student_grades.each do |grade| %>
+                      <tr>
+                        <td><%= grade.course&.course_title || "N/A" %></td>
+                        <td><%= grade.letter_grade || "N/A" %></td>
+                        <td><%= grade.assesment_total || "N/A" %></td>
+                        <td>
+                          <%if GradeChange.where(student_id: current_student, student_grade: grade).present? %>
+                            <%= link_to 'View Grade Change Request', grade_change_path(grade.grade_changes.where(student_id: current_student, course_id: grade.course.id).last), class: 'btn btn-primary btn-sm' %>
+                          <%elsif GradeChange.where(student_id: current_student, student_grade: grade).empty?%>
+                            <%= link_to 'Request Grade Change', new_grade_change_path(course_id: grade.course.id, grade_id: grade.id), class: 'btn btn-primary btn-sm' %>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <% end %>
+                  </tbody>
+                </table>
+              </div>
+              <div class="card-footer">
+                <% if @course && @course.id %>
+                  <%= link_to 'Request Grade Change', new_grade_change_path(course_id: @course.id), class: "btn btn-primary" %>
+                <% end %>
               </div>
             </div>
-            <div class="card-body table-responsive p-0">
-              <table class="table table-hover text-nowrap">
-                <thead>
-                  <tr>
-                    <th>Course Title</th>
-                    <th>Grade Letter</th>
-                    <th>Total Mark</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% @student_grades.each do |grade| %>
-                    <tr>
-                      <td><%= grade.course&.course_title || "N/A" %></td>
-                      <td><%= grade.letter_grade || "N/A" %></td>
-                      <td><%= grade.assesment_total || "N/A" %></td>
-                      <td>
-                        <%if GradeChange.where(student_id: current_student, student_grade: grade).present? %>
-                          <%= link_to 'View Grade Change Request', grade_change_path(grade.grade_changes.where(student_id: current_student, course_id: grade.course.id).last), class: 'btn btn-primary btn-sm' %>
-                        <%elsif GradeChange.where(student_id: current_student, student_grade: grade).empty?%>
-                          <%= link_to 'Request Grade Change', new_grade_change_path(course_id: grade.course.id, grade_id: grade.id), class: 'btn btn-primary btn-sm' %>
-                        <%end%>
-                      </td>
-                    </tr>
-                  <% end %>
-                </tbody>
-              </table>
-            </div>
-            <div class="card-footer">
-              <% if @course && @course.id %>
-                <%= link_to 'Request Grade Change', new_grade_change_path(course_id: @course.id), class: "btn btn-primary" %>
-              <% end %>
-            </div>
-          </div>
+          <%end%>
         <% end %>
         <%if current_student.account_status == 'active'%>
          <%= render 'instruction' %>
