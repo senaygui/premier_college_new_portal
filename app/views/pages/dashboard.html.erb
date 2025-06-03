@@ -96,7 +96,7 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <% unless @student_grades.blank? %>
+        <% unless @student_grades.blank? && current_student.account_status == 'active' %>
           <div class="card card-success">
             <div class="card-header">
               <h3 class="card-title">
