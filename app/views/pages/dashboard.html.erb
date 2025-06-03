@@ -145,7 +145,7 @@
             </div>
           </div>
         <% end %>
-        <%if current_student.account_status = 'active'%>
+        <%if current_student.account_status == 'active'%>
          <%= render 'instruction' %>
         <%else%>
         <div class="col-12">
