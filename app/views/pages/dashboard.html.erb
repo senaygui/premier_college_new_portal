@@ -96,7 +96,7 @@
       </div>
 
       <div class="col-12 col-md-4">
-        <% unless @student_grades.blank? && current_student.account_status == 'active' %>
+        <% unless @student_grades.blank? && current_student.account_status != 'active' %>
           <div class="card card-success">
             <div class="card-header">
               <h3 class="card-title">
@@ -167,7 +167,7 @@
           <!-- /.card-header -->
           <div class="card-body">
             <p class="text-center">
-              <p class="text-danger">Your account is inactive due to Academic Dismissal/Academic Suspension. Please fill withdrawal and then apply for readmission.</p>
+              <strong class="text-danger">Your account is inactive due to Academic Dismissal/Academic Suspension. Please fill withdrawal and then apply for readmission.</strong>
             </p>
           </div>
           <!-- /.card-body -->
