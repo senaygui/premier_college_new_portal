@@ -103,7 +103,7 @@ class SemesterRegistration < ApplicationRecord
                                        AcademicStatusGraduate.get_academic_status(report:, student:)
                                      end
 
-            if report.academic_status.strip != 'Academic Dismissal' || (report.academic_status != 'Academic Suspension')
+            if report.academic_status.strip != 'Academic Dismissal' && report.academic_status.strip != 'Academic Suspension'
               if program.program_semester > student.semester
                 promoted_semester = student.semester + 1
                 student.update_columns(semester: promoted_semester)
@@ -112,7 +112,7 @@ class SemesterRegistration < ApplicationRecord
                 student.update_columns(semester: 1)
                 student.update_columns(year: promoted_year)
               end
-            elsif report.academic_status.strip == 'Academic Dismissal' || (report.academic_status == 'Academic Suspension')
+            else
               student.update_columns(account_status: 'inactive')
             end
           end
@@ -151,7 +151,7 @@ class SemesterRegistration < ApplicationRecord
               # report.academic_status = self.student.program.grade_systems.last.academic_statuses.where("min_value <= ?", report.cgpa).where("max_value >= ?", report.cgpa).last.status
             end
 
-            if report.academic_status != 'Academic Dismissal' || (report.academic_status != 'Academic Suspension') # || (report.academic_status != "Incomplete")
+            if report.academic_status.strip != 'Academic Dismissal' && report.academic_status.strip != 'Academic Suspension'
               if program.program_semester > student.semester
                 promoted_semester = student.semester + 1
                 student.update_columns(semester: promoted_semester)
@@ -160,7 +160,7 @@ class SemesterRegistration < ApplicationRecord
                 student.update_columns(semester: 1)
                 student.update_columns(year: promoted_year)
               end
-            elsif report.academic_status.strip == 'Academic Dismissal' || (report.academic_status == 'Academic Suspension')
+            else
               student.update_columns(account_status: 'inactive')
             end
           end
