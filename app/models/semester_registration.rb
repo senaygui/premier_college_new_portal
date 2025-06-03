@@ -246,7 +246,7 @@ class SemesterRegistration < ApplicationRecord
           all_courses << course_registration
         else
           # Handle the error (e.g., log it, notify the user, etc.)
-          puts "Cannot register for course #{course.course.course_title}: #{course_registration.errors.full_messages.join(', ')}"
+          # puts "Cannot register for course #{course.course.course_title}: #{course_registration.errors.full_messages.join(', ')}"
         end
       end
 
