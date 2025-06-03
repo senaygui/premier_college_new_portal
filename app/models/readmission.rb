@@ -1,6 +1,6 @@
 class Readmission < ApplicationRecord
   has_one_attached :receipt
-
+  after_commit :activate_student_if_approved_and_verified
 
   belongs_to :program
   belongs_to :department
@@ -13,10 +13,8 @@ class Readmission < ApplicationRecord
   private
 
   def activate_student_if_approved_and_verified
-    if (registrar_approval_status == 'approved' && finance_approval_status == 'approved')
+    if registrar_approval_status == 'approved' && finance_approval_status == 'approved'
       student.update(account_status: 'active')
     end
   end
-
-  after_save :activate_student_if_approved_and_verified
 end
