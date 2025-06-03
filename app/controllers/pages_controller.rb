@@ -23,7 +23,8 @@ class PagesController < ApplicationController
     @address = current_student.student_address
     @emergency_contact = current_student.emergency_contact
     @invoice = Invoice.find_by(student: current_student, semester: current_student.semester, year: current_student.year)
-    current_academic_calendar = AcademicCalendar.where(admission_type: current_student.admission_type).where(study_level: current_student.study_level).last
+    current_academic_calendar = AcademicCalendar.where(admission_type: current_student.admission_type).where(study_level: current_student.study_level).order(created_at: :desc)
+                                                .first
     @smr = current_student.semester_registrations.where(year: current_student.year,
                                                         semester: current_student.semester, academic_calendar_id: current_academic_calendar.id).last
     @payment_remaining = current_student.semester_registrations.where('remaining_amount > ?', 0).last if @smr.nil?
