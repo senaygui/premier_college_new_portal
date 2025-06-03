@@ -80,7 +80,7 @@
           <% if current_student.account_status == 'active' %>
   <%= link_to "Enroll Courses for year #{current_student.year}, semester #{current_student.semester}", enrollement_path, class: "btn btn-success" %>
 <% else %>
-  <p class="text-danger">Your account is inactive. Please contact the administration.</p>
+  <p class="text-danger">Your account is inactive due to Academic Dismissal/Academic Suspension. Please fill withdrawal and then apply for readmission.</p>
 <% end %>
 
           </div>
