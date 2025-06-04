@@ -1,12 +1,26 @@
 # frozen_string_literal: true
-ActiveAdmin.register ExternalTransfer do
-  menu parent: "Add-ons", label: "Student Transfer"
 
+ActiveAdmin.register ExternalTransfer do
+  menu parent: 'Add-ons', label: 'Student Transfer'
+
+  permit_params :first_name, :last_name, :department_id, :previous_institution, :previous_student_id, :status, :created_at,
+                :updated_at, :study_level, :admission_type, :message, :email, course_exemptions_attributes: %i[id course_id
+                                                                                                               letter_grade
+                                                                                                               credit_hour
+                                                                                                               course_taken
+                                                                                                               exemption_approval
+                                                                                                               exemption_type
+                                                                                                               exemptible_type
+                                                                                                               exemptible_id
+                                                                                                               created_by
+                                                                                                               updated_by
+                                                                                                               created_at
+                                                                                                               updated_at _destroy]
   # Filters on the index page
   filter :first_name
   filter :last_name
   filter :email
-  filter :status, as: :select, collection: ExternalTransfer.statuses.keys
+  # filter :status, as: :select, collection: ExternalTransfer.statuses.keys
   filter :department
   filter :previous_institution
   filter :created_at
@@ -16,7 +30,7 @@ ActiveAdmin.register ExternalTransfer do
   scope :approved_finance_status do |transfers|
     transfers.where(finance_status: 'approved')
   end
-  
+
   # Index page configurations
   index do
     selectable_column
@@ -26,11 +40,11 @@ ActiveAdmin.register ExternalTransfer do
     column :email
     column :department
     column :previous_institution
-    column "Attachment" do |me|
+    column 'Attachment' do |me|
       if me.receipt.attached?
-        link_to "View Receipt", url_for(me.receipt)
+        link_to 'View Receipt', url_for(me.receipt)
       else
-        "No Receipt"
+        'No Receipt'
       end
     end
     column :created_at
@@ -56,33 +70,38 @@ ActiveAdmin.register ExternalTransfer do
       row :approved_by
       row :transcript do |transfer|
         if transfer.transcript.attached?
-          link_to 'Download Transcript', rails_blob_path(transfer.transcript, disposition: "attachment")
+          link_to 'Download Transcript', rails_blob_path(transfer.transcript, disposition: 'attachment')
         else
-          "No Transcript Attached"
+          'No Transcript Attached'
         end
       end
-      row "Attachment" do |me|
+      row 'Attachment' do |me|
         if me.receipt.attached?
           link_to me.receipt.filename.to_s, url_for(me.receipt)
         else
-          "No reciept"
+          'No reciept'
         end
       end
       row :created_at
       row :updated_at
     end
 
-    # Button to create a new exemption if the status is accepted
-    #if external_transfer.accepted?
-    #  panel "Actions" do
-    #  #link_to 'Create Exemption', new_admin_exemption_path(external_transfer_id: external_transfer.id), class: 'button'
-    #  link_to 'Create Exemption', new_admin_exemption_path(external_transfer_id: external_transfer.id, program_id: external_transfer.program_id), class: 'button'
-    #end
-    #end
+    if resource.course_exemptions.any?
+      panel 'Course Exemptions' do
+        table_for resource.course_exemptions do
+          column('Course') { |ex| ex.course&.course_title }
+          column('Letter Grade', &:letter_grade)
+          column('Credit Hour', &:credit_hour)
+          column('Course Taken', &:course_taken)
+          column('Exemption Approval', &:exemption_approval)
+        end
+      end
+    end
 
     if external_transfer.accepted? && external_transfer.finance_status == 'approved'
-      panel "Actions" do
-        link_to 'Create Exemption', new_admin_exemption_path(external_transfer_id: external_transfer.id, program_id: external_transfer.program_id), class: 'button'
+      panel 'Actions' do
+        link_to 'Create Exemption',
+                new_admin_exemption_path(external_transfer_id: external_transfer.id, program_id: external_transfer.program_id), class: 'button'
       end
     end
 
@@ -97,7 +116,9 @@ ActiveAdmin.register ExternalTransfer do
       f.input :first_name
       f.input :last_name
       f.input :email
-      f.input :department, as: :select, collection: Department.all.collect { |department| [department.department_name, department.id] }
+      f.input :department, as: :select, collection: Department.all.collect { |department|
+                                                      [department.department_name, department.id]
+                                                    }
       f.input :previous_institution
       f.input :previous_student_id
       f.input :status, as: :select, collection: ExternalTransfer.statuses.keys
@@ -107,19 +128,34 @@ ActiveAdmin.register ExternalTransfer do
       f.input :approved_by
       f.input :transcript, as: :file
     end
+    panel 'course exemptions' do
+      f.has_many :course_exemptions, heading: ' ', remote: true, allow_destroy: true, new_record: true do |a|
+            a.input :course_id, as: :search_select, url: admin_courses_path,
+                                fields: %i[course_title id], display_name: 'course_title', minimum_input_length: 2,
+                                order_by: 'id_asc'
+            a.input :letter_grade
+            a.input :credit_hour
+            a.input :course_taken
+            a.input :exemption_approval, as: :select, collection: %w[Pending Approved Rejected]
+            a.label :_destroy
+      end
+    end
 
     f.actions
   end
 
   # Action Items
   action_item :approve, only: :show do
-    link_to 'Approve', approval_admin_external_transfer_path(external_transfer), method: :put if external_transfer.pending?
+    if external_transfer.pending?
+      link_to 'Approve', approval_admin_external_transfer_path(external_transfer),
+              method: :put
+    end
   end
 
   # Custom Routes for Approval
   member_action :approval, method: :put do
     resource.update(status: ExternalTransfer.statuses[:accepted], approved_by: current_admin_user.email)
-    redirect_to resource_path, notice: "External Transfer approved successfully."
+    redirect_to resource_path, notice: 'External Transfer approved successfully.'
   end
 
   # Batch Actions for Accept and Reject
@@ -127,21 +163,20 @@ ActiveAdmin.register ExternalTransfer do
     batch_action_collection.find(ids).each do |external_transfer|
       external_transfer.update(status: 1, approved_by: current_admin_user.email)
     end
-    redirect_to collection_path, alert: "The selected transfers have been accepted."
+    redirect_to collection_path, alert: 'The selected transfers have been accepted.'
   end
 
   batch_action :reject do |ids|
     batch_action_collection.find(ids).each do |external_transfer|
       external_transfer.update(status: 2, approved_by: current_admin_user.email)
     end
-    redirect_to collection_path, alert: "The selected transfers have been rejected."
+    redirect_to collection_path, alert: 'The selected transfers have been rejected.'
   end
 
   batch_action :approve_finance_status do |ids|
     batch_action_collection.find(ids).each do |external_transfer|
       external_transfer.update(finance_status: 'approved')
     end
-    redirect_to collection_path, alert: "The finance status of the selected transfers has been approved."
+    redirect_to collection_path, alert: 'The finance status of the selected transfers has been approved.'
   end
-
 end
