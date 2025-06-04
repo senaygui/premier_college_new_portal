@@ -206,11 +206,16 @@
           <!-- /.card-header -->
           <div class="card-body">
             <div class="card-body">
+              
               <strong class="text-success">Your account has been Approved. Click the enroll button to enroll courses.</strong>
             </div>
           </div>
           <div class="card-footer">
-            <%= link_to "Enroll Courses", edit_semester_registration_path(current_student.semester_registrations.last.id), class: "btn btn-success"%>
+            <%if @smr.nil?%>
+            <%= link_to "Enroll Courses for year #{current_student.year}, semester #{current_student.semester}", enrollement_path, class: "btn btn-success" %>
+            <%else%>
+              <%= link_to "Enroll Courses", edit_semester_registration_path(current_student.semester_registrations.last.id), class: "btn btn-success"%>
+            <%end%>
           </div>
         </div>
       </div>
