@@ -158,7 +158,7 @@
     <%end%>
   <%end%>
 <%else%>
-  <%if !current_student.invoices.last.present?%>
+  <%if !current_student.invoices.last(academic_calendar_id: @current_academic_calendar).present?%>
     <% if current_student.document_verification_status == "pending"%>
       <div class="col-12">
         <div class="card card-primary instruction-card">
