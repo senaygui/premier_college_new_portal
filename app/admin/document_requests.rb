@@ -1,5 +1,5 @@
 ActiveAdmin.register DocumentRequest do
-  menu priority: 1
+  menu parent: 'Add-ons'
   config.batch_actions = true
 
   permit_params :first_name, :middle_name, :last_name, :mobile_number, :email, :admission_type, :study_level, :program,

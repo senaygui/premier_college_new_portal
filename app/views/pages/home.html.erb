@@ -28,7 +28,7 @@
   }
 </style>
 <div class="content mt-3">
-  <div class="container">
+  <div class="">
     <div class="row  justify-content-center">
       <div class="col-12 col-md-8">
         <div class="card  card-primary">
@@ -41,21 +41,60 @@
 					<!-- /.card-header -->
 					<div class="card-body p-5">
 						<div class="d-flex justify-content-center">
-							<%= image_tag("logo.jpg", class: "banner")%>
+							<%= image_tag("logo3.jpg", class: "banner")%>
 						</div>
 						
-	        	<h1 class="text-center">Welcome To Hope Enterprise University College</h1>
+	        	<h1 class="text-center">Welcome To Premier Online College</h1>
 	        	<div class="container text-center">
 	        		<p>
-		        		This is HEUC's  registrar and school management portal system. To registrar click the << Continue >> button and answer the quetions.
+		        		This is Premier College registrar and school management portal system. To registrar click the << Continue >> button and answer the quetions.
 		        	</p>
-		        	<%=link_to "continue",admission_path, class: "btn btn-block bg-gradient-primary btn-lg"%>
+		        	<%=link_to "continue",requirements_path(modality: "online", study_level: "graduate"),'data-no-turbolink' => false, class: "btn btn-block bg-gradient-primary btn-lg"%>
 	        	</div>
 		        
 					</div>
 					<!-- /.card-body -->
 				</div>
 			</div>
-			
+      <!-- Alumni Services Sidebar -->
+      <div class="col-lg-3 col-md-4 mb-4">
+        <div class="card" style="position:sticky;top:30px;">
+          <div class="card-header" style="background:#077b3f;color:#fff;">
+            <h4 class="mb-0">Alumni Services</h4>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush alumni-sidebar-list">
+              <li class="list-group-item">
+                <%= link_to 'Official Transcript', new_document_request_path(document_type: 'Official Transcript'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'Original Degree', new_document_request_path(document_type: 'Original Degree'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'Temporary Certificate', new_document_request_path(document_type: 'Temporary Certificate'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'Student Copy', new_document_request_path(document_type: 'Student Copy'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'To Whom It May Concern', new_document_request_path(document_type: 'To Whom It May Concern'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+              <li class="list-group-item">
+                <%= link_to 'Track Your Request', track_form_document_requests_path(document_type: 'Track Request'), style: 'color:#036696;font-weight:600;' %>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="position:sticky;top:30px;">
+              <div class="card-header" style="background:#077b3f;color:#fff; border-radius:0;">
+                <h4 class="mb-0">Other Services</h4>
+              </div>
+              <ul class="list-group list-group-flush alumni-sidebar-list">
+                <li class="list-group-item">
+                  <%= link_to 'Apply for Transfer', new_external_transfer_path, style: 'color:#036696;font-weight:600;' %>
+                </li>
+              </ul>
+            </div>
+      </div>
     </div>
   </div>

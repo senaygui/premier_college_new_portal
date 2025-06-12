@@ -13,6 +13,10 @@
 
 
 $(document).ready(function () {
+  // Add header banner
+  if ($('#header').length) {
+    $('#header').before("<div class='headline'><div class='banner-logo'></div> <h1 class='banner-title'> Premier College Registrar Portal</h1></div>");
+  }
 
   function toggleFields() {
     var role = $('#admin_user_role').val();
@@ -41,7 +45,7 @@ $(document).ready(function () {
   $('#admin_user_role').change(function() {
     toggleFields();
   });
-t  
+
   
   $("#student_photo").change(function (data) {
 
@@ -95,9 +99,6 @@ t
       $('.grp2').show();
     }
   });
-
-  $('#header').before("<div class='headline'><div class='banner-logo'></div> <h1 class='banner-title'> HEUC Registrar Portal</h1></div>");
-
 
   $('.link').on('click', function (e) {
     e.preventDefault();

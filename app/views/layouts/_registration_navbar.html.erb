@@ -1,6 +1,6 @@
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
   <div class="container-fluid"> 
-    <%= link_to image_tag("logo.jpg", size: "142x55", alt: "logo"), root_path, class: "navbar-brand"%>
+    <%= link_to image_tag("logo3.jpg", size: "142x70", alt: "logo"), root_path, class: "navbar-brand"%>
     
     <!-- right navbar links -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -15,7 +15,7 @@
           <%if current_page?(new_student_registration_path)%>
             <strong><%= link_to "Sign in", new_student_session_path, class: "nav-link"%> </strong> 
           <%elsif current_page?(new_student_session_path)%>
-            <strong><%= link_to "Register Now", admission_path, class: "nav-link"%> </strong> 
+            <strong><%= link_to "Register Now", requirements_path(modality: "online", study_level: "graduate"),'data-no-turbolink' => false, class: "nav-link"%> </strong> 
           <%end%>
         </li>
         <li class="nav-item">

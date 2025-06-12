@@ -230,6 +230,12 @@ class SemesterRegistration < ApplicationRecord
 
       courses_to_register = out_of_batch? ? student.get_added_course : student.get_current_courses
 
+      # Filter out exempted courses for external transfer students
+      # if student.is_a?(ExternalTransfer) && student.course_exemptions.any?
+      #   exempted_course_ids = student.course_exemptions.pluck(:course_id)
+      #   courses_to_register = courses_to_register.reject { |course| exempted_course_ids.include?(course.id) }
+      # end
+
       courses_to_register.each do |course|
         course_registration = CourseRegistration.new(
           semester_registration_id: id,

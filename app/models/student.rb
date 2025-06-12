@@ -35,6 +35,8 @@ class Student < ApplicationRecord
   has_one_attached :highschool_transcript, dependent: :destroy
   has_one_attached :diploma_certificate, dependent: :destroy
   has_one_attached :degree_certificate, dependent: :destroy
+  has_one_attached :gat_certificate, dependent: :destroy
+  has_one_attached :grade_8_ministry_certificate, dependent: :destroy
   has_one_attached :undergraduate_transcript, dependent: :destroy
   has_one_attached :photo, dependent: :destroy
   has_many :student_grades, dependent: :destroy
@@ -53,6 +55,7 @@ class Student < ApplicationRecord
   has_many :payments
   has_many :transfers, dependent: :destroy
   validate :password_complexity
+  validate :degree_certificate_required_for_graduate
   # validates :student_grades, presence: true
   enum section_status: {
     no_assigned: 0,
@@ -62,6 +65,12 @@ class Student < ApplicationRecord
     if password.present? && !password.match(/^(?=.*[a-z])(?=.*[A-Z])/)
         errors.add :password,
                    'must be between 5 to 20 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character'
+    end
+  end
+
+  def degree_certificate_required_for_graduate
+    if study_level == 'graduate' && !degree_certificate.attached?
+      errors.add(:degree_certificate, 'is required for graduate students')
     end
   end
 

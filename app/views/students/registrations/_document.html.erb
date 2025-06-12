@@ -3,6 +3,10 @@
     <%= f.input :highschool_transcript, as: :file, label: "Grade 9, 10, 11,and 12 transcripts",class: 'form-control'%>
   </div>
   <div class="col-12 col-md-6 form-group">
+    <%= f.input :grade_8_ministry_certificate, as: :file, label: "Grade 8 ministry certificate",class: 'form-control'%>
+  </div>
+  
+  <div class="col-12 col-md-6 form-group">
     <%= f.input :grade_10_matric, as: :file, label: "Grade 10 matric certificate",class: 'form-control'%>
   </div>
   <div class="col-12 col-md-6 form-group">
@@ -16,10 +20,14 @@
   </div>
   <%if params[:study_level] == "graduate"%>
     <div class="col-12 col-md-6 form-group">
-      <%= f.input :degree_certificate, as: :file, label: "Undergraduate degree certificate",class: 'form-control'%>
+      <%= f.input :degree_certificate, as: :file, label: "Undergraduate degree certificate", class: 'form-control', required: true %>
+      <small class="text-danger">* Required for graduate students</small>
+    </div>
+    <div class="col-12 col-md-6 form-group">
+      <%= f.input :gat_certificate, as: :file, label: "NGAT (National Graduate Addmission Test) certificate",class: 'form-control'%>
     </div>
   <%end%>
-  <!-- <div class="col-12 col-md-12 form-group">
+   <!-- <div class="col-12 col-md-12 form-group">
     <strong>Declaration by the Applicant</strong>
     <p>
       <div class="mb-3 form-check">

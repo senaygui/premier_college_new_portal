@@ -158,7 +158,7 @@ ActiveAdmin.register Student do
      collection_action :export_registrar_stat_csv, method: :get do
        csv_data = CSV.generate(headers: true) do |csv|
          # Header row
-         csv << ['Hope Enterprise University College/Office of the Registrar Statistics for Regular and Extension Students']
+         csv << ['Premier College/Office of the Registrar Statistics for Regular and Extension Students']
 
          # Sub-header row for columns
          header_row = ['Program Type', 'Program']
@@ -556,7 +556,6 @@ ActiveAdmin.register Student do
   action_item :edit, only: :show, priority: 0 do
     link_to 'Approve Student', edit_admin_student_path(student.id, page_name: 'approval')
   end
-  
 
   show title: proc { |student|
     truncate("#{student.first_name.upcase} #{student.middle_name.upcase} #{student.last_name.upcase}",

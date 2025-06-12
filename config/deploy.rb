@@ -1,38 +1,37 @@
 # config valid for current version and patch releases of Capistrano
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.17.3"
+lock '~> 3.17.3'
 
-set :application, "master"
+set :application, 'master'
 # set :ssh_options, { :forward_agent => true }
-set :repo_url, "https://github.com/senaygui/hope_portal_system.git"
+set :repo_url, 'https://github.com/senaygui/premier_college_new_portal.gitt'
 
-
-set :git_http_username, 'senaygui' 
-ask(:github_token, "github_token", echo: false) 
+set :git_http_username, 'senaygui'
+ask(:github_token, 'github_token', echo: false)
 set :git_http_password, fetch((:github_token))
-#set :git_strategy, Capistrano::Git::SubmoduleStrategy
+# set :git_strategy, Capistrano::Git::SubmoduleStrategy
 
 # set :user, "deploy"
 set :passenger_restart_with_touch, true
 # set :rbenv_path, '/home/deploy/.rbenv/'
 # set :deploy_to, "/home/deploy/yic_production"
-set :stages, %w(production staging)
+set :stages, %w[production staging]
 # append :linked_files, "config/database.yml", "config/master.key"
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", "public/system", "public/uploads"
+append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/uploads',
+       'storage'
 
 set :keep_releases, 10
-set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 set :ssh_options, {
   forward_agent: false
 }
 
 # set :git_ssh_command, "ssh -o ForwardAgent=yes"
 
-
 # set :ssh_options, { keys:['/home/deploy/.ssh/id_rsa'] }
 #
 
-# :forward_agent => true, 
+# :forward_agent => true,
 #    auth_methods:['publickey'],
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp

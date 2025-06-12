@@ -1,4 +1,5 @@
 ActiveAdmin.register ClassScheduleWithFile do
+  menu parent: 'Add-ons'
     permit_params :name, :file_attachment
 
 

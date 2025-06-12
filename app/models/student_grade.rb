@@ -143,6 +143,30 @@ class StudentGrade < ApplicationRecord
   #   end
   # end
 
+  def moodle_grade
+    url = URI('https://lms.premiercollege.edu.et/webservice/rest/server.php')
+    moodle = MoodleRb.new('824b4fdd7f79d85eb767106ce969bf57', 'https://lms.premiercollege.edu.et/webservice/rest/server.php')
+    lms_student = moodle.users.search(email: "#{student.email}")
+    user = lms_student[0]['id']
+    https = Net::HTTP.new(url.host, url.port)
+    https.use_ssl = true
+
+    request = Net::HTTP::Post.new(url)
+    form_data = [%w[wstoken 92dac7334a9d4aee7cc3474b81f15c45],
+                 %w[wsfunction gradereport_overview_get_course_grades], %w[moodlewsrestformat json], ['userid', "#{user}"]]
+    request.set_form form_data, 'multipart/form-data'
+    response = https.request(request)
+    # puts response.read_body
+    results =  JSON.parse(response.read_body)
+    course_code = moodle.courses.search("#{course_registration.course.course_code}")
+    course = course_code['courses'][0]['id']
+
+    total_grade = results['grades'].map { |h1| h1['rawgrade'] if h1['courseid'] == course }.compact.first
+    grade_letter = results['grades'].map { |h1| h1['grade'] if h1['courseid'] == course }.compact.first
+    # self.update_columns(grade_in_letter: grade_letter)
+    update(assesment_total: total_grade.to_f)
+  end
+
   private
 
   def update_grade_report

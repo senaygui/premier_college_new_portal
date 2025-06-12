@@ -1,10 +1,10 @@
 class StudentCopy < Prawn::Document
   def initialize(students, gc_date)
-    super(page_layout: :landscape, background: open('app/assets/images/logo.png'))
+    super(page_layout: :landscape, background: open('app/assets/images/logo3.jpg'))
     @students = students
     gc_date = Date.parse(gc_date)
     @students.each_with_index do |stud, _index|
-      text 'HEUC', inline_format: true, size: 12, align: :center, font_style: :bold
+      text 'premier college', inline_format: true, size: 12, align: :center, font_style: :bold
       move_down 10
       text 'OFFICE OF THE REGISTRAR', inline_format: true, size: 12, align: :center, font_style: :bold
       move_down 10
@@ -26,7 +26,8 @@ class StudentCopy < Prawn::Document
       move_down 10
       student_copy = stud.course_registrations.order(:semester).group_by { |c| [c.semester, c.year] }
       student_copy.each do |key, value|
-        text "<u> Academic Year:#{key[1]}/#{key[1] + 1} Semester #{key[0]}</u>", size: 14, font_style: :bold, inline_format: true
+        text "<u> Academic Year:#{key[1]}/#{key[1] + 1} Semester #{key[0]}</u>", size: 14, font_style: :bold,
+                                                                                 inline_format: true
         move_down 10
         table each_stud_in_table(value, key[0]), cell_style: { size: 9, font_style: :bold, align: :center } do
           row(0).font_style = :bold

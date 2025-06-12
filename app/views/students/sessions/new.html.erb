@@ -1,13 +1,15 @@
 <%provide(:title, "Sign In")%>
 <div class="login-container d-flex">
   <!-- Left Section -->
-  <div class="left-section text-center text-white d-flex flex-column justify-content-center align-items-center" style="background-color: #4A3AFF; width: 50%; height: 100vh;">
+  <div class="left-section text-center text-white d-flex flex-column justify-content-center align-items-center" style="width: 50%; height: 100vh; background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(76, 76, 76, 0.8)), url('/assets/sign-in.jpg'); background-size: cover; background-position: center;">
     <div class="logo mb-4">
-      <%= image_tag 'logo.jpg', alt: 'Akademi Logo', class: 'mb-3', size: '300x170' %>
-      <h1>Hope Enterprise University College</h1>
+      <%= image_tag 'logo2.jpg', alt: 'Akademi Logo', class: 'mb-3', size: '300x170' %>
+      <h1 class="text-white display-6">Welcome To Premier <span class="text-warning">College</span></h1>
     </div>
     <h2>Welcome back!</h2>
-    <p>Address: Jemo 1 in front of Lebu Medehanialem Church, Addis Ababa</p>
+    <p>Address: Kality Menaharia around Total behind Quara Hotel, Addis Ababa, ET</p>
+    <p>call: <a href="tel:+251908522222">+251908522222</a></p>
+    <p>Email: <a href="mailto:info@premiercollege.edu.et">info@premiercollege.edu.et</a></p>
   </div>
 
   <!-- Right Section -->
@@ -38,7 +40,7 @@
         <%= f.submit "Sign In", class: "btn btn-primary btn-block" %>
       <% end %>
 
-      <p class="text-center mt-3">Don't have an account? <%= link_to "Sign up", admission_path, class: "text-decoration-none" %></p>
+      <p class="text-center mt-3">Don't have an account? <%= link_to "Sign up", requirements_path(modality: "online", study_level: "graduate"), class: "text-decoration-none" %></p>
     </div>
   </div>
 </div>

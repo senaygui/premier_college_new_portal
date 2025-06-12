@@ -1,26 +1,18 @@
 # server '148.113.8.52', user: 'deploy', roles: %w{app db web}
-set :ssh_options, {
-  forward_agent: false,
-  verify_host_key: :never
-}
+role :app, %w[deploy@87.98.245.128]
+role :web, %w[deploy@87.98.245.128]
+role :db, %w[deploy@87.98.245.128], primary: true
 
-role :app, %w{aacp@15.235.65.231}, port: 77
-role :web, %w{aacp@15.235.65.231}, port: 77
-role :db, %w{aacp@15.235.65.231}, port: 77, :primary => true
+set :branch, 'master'
+set :rails_env, 'production'
 
-#set :branch, "main"
-set :branch, "master" 
-set :rails_env, "production"
-
-set :deploy_to, '/home/aacp/heuc_portal' 
+set :deploy_to, '/home/deploy/premier_portal_new'
 
 # You can define all roles on a single server, or split them:
 
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-
-
 
 # role-based syntax
 # ==================
@@ -34,8 +26,6 @@ set :deploy_to, '/home/aacp/heuc_portal'
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
-
-
 # Configuration
 # =============
 # You can set any configuration variable like in config/deploy.rb
@@ -43,8 +33,6 @@ set :deploy_to, '/home/aacp/heuc_portal'
 # For available Capistrano configuration variables see the documentation page.
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
-
-
 
 # Custom SSH Options
 # ==================

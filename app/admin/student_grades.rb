@@ -21,13 +21,18 @@ ActiveAdmin.register StudentGrade do
                                                                                       }
     member_action :generate_grade, method: :put do
       @student_grade = StudentGrade.find(params[:id])
+      @student_grade.moodle_grade
       @student_grade.generate_grade
       redirect_back(fallback_location: admin_student_grade_path)
     end
     # action_item :update, only: :show do
     #   link_to 'Generate Grade', generate_grade_admin_student_grade_path(student_grade.id), method: :put, data: { confirm: 'Are you sure?' }
     # end
-
+    member_action :get_grade_from_lms, method: :put do
+      @student_grade = StudentGrade.find(params[:id])
+      @student_grade.moodle_grade
+      redirect_back(fallback_location: admin_student_grade_path)
+    end
     batch_action 'Generate Grade for', method: :put, if: proc {
       current_admin_user.role == 'instructor' || current_admin_user.role == 'admin'
     }, confirm: 'Are you sure?' do |ids|

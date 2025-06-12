@@ -95,7 +95,7 @@
     <div class="col-12">
       <h1 class="title-header mt-5 mb-2">Digital Literacy Assesement</h1>
       <p class="text-center header-text mb-5 text-muted">
-        There are certain requirements you have to fulfill in order to be addmitted to HEUC and start Learning. Make sure that you meet the minimum requirements before starting your application process.
+        There are certain requirements you have to fulfill in order to be addmitted to Premier College and start Learning. Make sure that you meet the minimum requirements before starting your application process.
       </p>
     </div>
     <div class="col-12 col-md-4">
@@ -111,7 +111,7 @@
         <div class="card-body">
           <p  class="text-center" style="font-size: 20px;"><strong>Select the appropriate answer for multiple choose questions</strong></p>  
           <p class="text-muted text-center">
-            There are certain requirements you have to fulfill in order to be addmitted to HEUC and start Learning. Make sure that you meet the minimum requirements before starting your application process.
+            There are certain requirements you have to fulfill in order to be addmitted to Premier College and start Learning. Make sure that you meet the minimum requirements before starting your application process.
           </p>
           <hr>
           <p class="text-muted text-center">
@@ -225,12 +225,12 @@
 
     if(numCorrect >= 6){
       resultsContainer.innerHTML = `<p class="mb-2" style="color:green;">${numCorrect} out of ${myQuestions.length}</p>
-      <p style="color:green;">Congratulations you have passed the technical knowledge requirement to enroll to HEUC. Please continue to the registration process.</p>
+      <p style="color:green;">Congratulations you have passed the technical knowledge requirement to enroll to Premier College. Please continue to the registration process.</p>
       <%= link_to "Apply Now", new_student_registration_path(modality: "online", study_level: "graduate"), class: "btn btn-primary btn-lg"%>`;
     }
     else{
       resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length} <br>
-      <p style="color:red;">Sorry you don't fulfill our minimum requirement for enrolling in HEUC online program. Please upgrade your technical abilities and try again later.</p>`;
+      <p style="color:red;">Sorry you don't fulfill our minimum requirement for enrolling in Premier College online program. Please upgrade your technical abilities and try again later.</p>`;
     }
     
 

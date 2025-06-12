@@ -23,7 +23,7 @@
 //   .status_tag { background: #6090DB; }
 // @import "active_admin_flat_skin";
 $skinMainFirstColor: #024d71 !default;
-$skinMainSecondColor: #168C40 !default;
+$skinMainSecondColor: #8c181b !default;
 $menu-arrow-dark-icon-url: 'active_admin/nested_menu_arrow_dark.gif' !default;
 @import "wigu/active_admin_theme";
 // $panelBorder: #42558C;
@@ -48,7 +48,7 @@ $menu-arrow-dark-icon-url: 'active_admin/nested_menu_arrow_dark.gif' !default;
   color: #fff !important;
 }
 .table_tools_segmented_control li a{
-  background: #038C3E !important;
+  background: #024d71 !important;
 }
 .select2-dropdown {
     z-index: 3000
@@ -593,9 +593,11 @@ body.index.active_admin {
 // header
 #wrapper #header {
   height: 70px !important;
-  background-color: #0d94d5 !important;
-  border-bottom: 1px solid #0d94d5 !important;
+  background-color: #024d71 !important;
+  border-bottom: 1px solid #024d71 !important;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+  position: relative;
+  z-index: 999;
 }
 
 #header h1 {
@@ -621,21 +623,23 @@ body.index.active_admin {
 .headline {
   background-color: #fff;
   display: flex;
-  gap: 50px;
-  margin-left: 30px;
-
+  align-items: center;
+  gap: 20px;
+  padding: 10px 30px;
+  width: 100%;
+  position: relative;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .banner-logo {
-
-  background-image: url(asset_path('logo.jpg'));
+  background-image: url(asset_path('logo3.jpg'));
   background-position: center;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   width: 128px;
   height: 70px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-
+  flex-shrink: 0;
 }
 
 .banner-title {
@@ -644,8 +648,9 @@ body.index.active_admin {
   justify-content: center;
   font-size: 2em !important;
   line-height: 1;
-  margin: 0px;
+  margin: 0;
   font-weight: bold;
+  color: #024d71;
 }
 
 // scope

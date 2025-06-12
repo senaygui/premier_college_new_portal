@@ -1,4 +1,5 @@
 ActiveAdmin.register ClassSchedule do
+  menu parent: 'Add-ons'
   permit_params :course_id, :program_id, :section_id, :day_of_week, :start_time, :end_time, :classroom, :class_type, :instructor_name, :year, :semester
 
   collection_action :fetch_courses_and_sections, method: :get do

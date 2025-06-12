@@ -207,82 +207,6 @@
                           </div>
                         </div>
                       </div>
-                      <div id="emergency" class="content tab">
-                        <div class="row">
-                          <div class="col-12 col-md-3">
-                            <div class="card card-primary">
-                              <div class="card-header">
-                                <h3 class="card-title">
-                                  <i class="fas fa-info-circle mr-2"></i>
-                                  <strong>Instruction</strong>
-
-                                </h3>
-                              </div>
-                              <!-- /.card-header -->
-                              <div class="card-body">
-                                <p  class="text-center"><strong>Fill in the space(s) or Select the appropriate box(es) or selctions. * fields are required.</strong></p>  
-                                <p class="text-muted text-center">
-                                  You must provide your address information on the fields provided. Once you fill all the required feilds hit the Continue button.
-                                </p>
-                                <hr>
-                              </div>
-                              <!-- /.card-body -->
-                            </div>
-                          </div>
-                          <div class="col-12 col-md-9">
-                            <div class="card card-outline card-primary">
-                              <div class="card-header">
-                                <h3 class="card-title">
-                                  <i class="fas fa-info-circle mr-2"></i>
-                                  <strong>Emergency Contact Person Information</strong>
-                                </h3>
-                              </div>
-                              <div class="card-body">
-                                <%= render 'emergency', f: f%>
-                              </div>
-                              
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div id="school" class="content tab">
-                        <div class="row">
-                          <div class="col-12 col-md-3">
-                            <div class="card card-primary">
-                              <div class="card-header">
-                                <h3 class="card-title">
-                                  <i class="fas fa-info-circle mr-2"></i>
-                                  <strong>Instruction</strong>
-
-                                </h3>
-                              </div>
-                              <!-- /.card-header -->
-                              <div class="card-body">
-                                <p  class="text-center"><strong>Fill in the space(s) or Select the appropriate box(es) or selctions. * fields are required.</strong></p>  
-                                <p class="text-muted text-center">
-                                  You must provide your address information on the fields provided. Once you fill all the required feilds hit the Continue button.
-                                </p>
-                                <hr>
-                              </div>
-                              <!-- /.card-body -->
-                            </div>
-                          </div>
-                          <div class="col-12 col-md-9">
-                            <div class="card card-outline card-primary">
-                              <div class="card-header">
-                                <h3 class="card-title">
-                                  <i class="fas fa-info-circle mr-2"></i>
-                                  <strong>High School Information</strong>
-                                </h3>
-                              </div>
-                              <div class="card-body">
-                                <%= render 'school', f: f %>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
 
                       <div id="scan" class="content tab">
                         <div class="row">
@@ -339,8 +263,6 @@
                     <span class="step">2</span>
                     <span class="step">3</span>
                     <span class="step">4</span>
-                    <span class="step">5</span>
-                    <span class="step">6</span>
                   </div>
                   <div class="mr-2" style="float:right; margin-top: 5px;">
                       <button type="button" class="previous">Previous</button>
@@ -482,6 +404,11 @@
             password:{
               required:true,
               minlength:8,
+            },
+            'student[degree_certificate]': {
+              required: function() {
+                return $('input[name="student[study_level]"]:checked').val() === 'graduate';
+              }
             }
           },
           // Specify validation error messages
@@ -493,6 +420,9 @@
             'student[email]': {
               required:   "Email is required",
               email:    "Please enter a valid e-mail",
+            },
+            'student[degree_certificate]': {
+              required: "Degree certificate is required for graduate students"
             },
             phone:{
               required:   "Phone number is requied",
