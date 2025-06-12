@@ -14,11 +14,25 @@ class AddAdminUserToAssessment < ActiveRecord::Migration[7.0]
     # Then change the column to be not null
     change_column_null :assessments, :admin_user_id, false
 
-    # Correct typo and add other columns
+    # Add status column
     add_column :assessments, :status, :integer, default: 0
-    # Assuming course_registration_id should be not null, if existing records cause issues,
-    # you may need a similar backfill strategy for this column.
-    add_reference :assessments, :course_registration, null: false, type: :uuid, foreign_key: true
+
+    # Add course_registration_id as nullable first
+    add_reference :assessments, :course_registration, null: true, type: :uuid, foreign_key: true
+
+    # Backfill existing records with a default course_registration_id
+    first_course_registration = CourseRegistration.first
+    if first_course_registration
+      Assessment.update_all(course_registration_id: first_course_registration.id)
+    else
+      # Consider if it's acceptable for assessments to exist without a course_registration_id
+      # If not, you'll need to create a default CourseRegistration or adjust your data.
+      raise 'No CourseRegistration found to assign to existing Assessment records. Please create one or adjust the migration logic.'
+    end
+
+    # Then change the column to be not null
+    change_column_null :assessments, :course_registration_id, false
+
     remove_column :assessments, :student_grade_id
   end
 
