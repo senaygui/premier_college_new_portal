@@ -6,7 +6,7 @@ class StudentTemporary < Prawn::Document
       move_down 100
       #  text "Full Name: <u>#{stud.name.full.capitalize}</u>         Sex: <u>#{stud.gender.capitalize}</u>           Year: <u>#{stud.student.year}</u> ",:inline_format => true, size: 12, font_style: :bold
       move_down 10
-      text 'HOPE ENTERPRISE UNIVERSITY COLLEGE', inline_format: true, size: 20, align: :center
+      text 'Premier College', inline_format: true, size: 20, align: :center
       move_down 10
       text 'OFFICE OF THE REGISTRAR', inline_format: true, size: 18, align: :center
       move_down 10
@@ -19,7 +19,7 @@ class StudentTemporary < Prawn::Document
                                                                                             size: 18, align: :center
       stroke_horizontal_rule
       move_down 20
-      text 'Graduated from HOPE ENTERPRISE UNIVERSITY COLLEGE', inline_format: true, size: 18, align: :center
+      text 'Graduated from Premier College', inline_format: true, size: 18, align: :center
       move_down 20
       text 'with', inline_format: true, size: 18, align: :center
       move_down 20
@@ -51,7 +51,7 @@ class StudentTemporary < Prawn::Document
       #     font "Helvetica"
       #     stroke_horizontal_rule
       #     move_down(5)
-      #     text "Hope Enterprise University College Registrar Portal", :size => 16, align: :center
+      #     text "Premier College Registrar Portal", :size => 16, align: :center
       #     text "+251-9804523154", :size => 16, align: :center
 
       # end
