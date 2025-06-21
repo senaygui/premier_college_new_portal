@@ -43,7 +43,7 @@ class StudentTemporary < Prawn::Document
     repeat :all do
       bounding_box [bounds.left, bounds.top], width: bounds.width do
         font 'Helvetica'
-        image open('app/assets/images/logo.jpg'), fit: [120, 100], position: :center
+        image open('app/assets/images/logo3.jpg'), fit: [120, 100], position: :center
         stroke_horizontal_rule
       end
 
